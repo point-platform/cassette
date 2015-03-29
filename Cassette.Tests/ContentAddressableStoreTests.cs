@@ -1,0 +1,131 @@
+﻿using System;
+using System.IO;
+using Xunit;
+
+namespace Cassette.Tests
+{
+    public class ContentAddressableStoreTests : IDisposable
+    {
+        private readonly ContentAddressableStore _store;
+        private readonly string _contentPath;
+
+        public ContentAddressableStoreTests()
+        {
+            // Create a new temporary content path
+            var tempPath = Path.GetTempPath();
+            var random = new Random();
+            do
+            {
+                _contentPath = Path.Combine(tempPath, "Cassette-Test-Data-" + random.Next().ToString("X"));
+            }
+            while (Directory.Exists(_contentPath));
+
+            // Create a store
+            _store = new ContentAddressableStore(_contentPath);
+        }
+
+        public void Dispose()
+        {
+            if (_contentPath == null)
+                return;
+
+            // Recursively delete all generated content
+            foreach (var subpath in Directory.GetDirectories(_contentPath))
+            {
+                foreach (var contentFile in Directory.GetFiles(subpath))
+                {
+                    File.SetAttributes(contentFile, FileAttributes.Normal);
+                    File.Delete(contentFile);
+                }
+                Directory.Delete(subpath);
+            }
+            Directory.Delete(_contentPath);
+        }
+
+        [Fact]
+        public async void Contains()
+        {
+            Assert.False(_store.Contains(Hash.Parse("40613A45BC715AE4A34895CBDD6122E982FE3DF5")));
+            Assert.False(_store.Contains(Hash.Parse("07FA0B2F00BA82A440BFEACAFD8B0B8D1B3E4EE7")));
+            Assert.False(_store.Contains(Hash.Parse("0E913CE8D693110A1FD2F894F35F0A77C97B9A74")));
+
+            var stream = TestUtil.GetRandomData(1024);
+
+            var hash = await _store.WriteAsync(stream);
+
+            Assert.True(_store.Contains(hash));
+        }
+
+        [Fact]
+        public async void WriteProducesCorrectHash()
+        {
+            var stream = TestUtil.GetRandomData(1024);
+
+            var expectedHash = TestUtil.CalculateHash(stream);
+
+            Assert.Equal(expectedHash, await _store.WriteAsync(stream));
+        }
+
+        [Fact]
+        public async void WriteExistingContent()
+        {
+            var stream = TestUtil.GetRandomData(1024);
+
+            var hash1 = await _store.WriteAsync(stream);
+
+            stream.Position = 0;
+
+            var hash2 = await _store.WriteAsync(stream);
+
+            Assert.Equal(hash1, hash2);
+        }
+
+        [Fact]
+        public async void WriteCreatesFile()
+        {
+            var stream = TestUtil.GetRandomData(1024);
+
+            var actualHash = await _store.WriteAsync(stream);
+
+            var actualHashString = Hash.Format(actualHash);
+            var subpath = Path.Combine(_contentPath, actualHashString.Substring(0, 4));
+            var contentPath = Path.Combine(subpath, actualHashString.Substring(4));
+            Assert.True(Directory.Exists(subpath));
+            Assert.True(File.Exists(contentPath));
+
+            var fileInfo = new FileInfo(contentPath);
+            Assert.Equal(1024, fileInfo.Length);
+            Assert.Equal(FileAttributes.ReadOnly, fileInfo.Attributes);
+            Assert.True(fileInfo.IsReadOnly);
+
+            stream.Position = 0;
+            using (var fileStream = File.OpenRead(contentPath))
+                TestUtil.AssertStreamsEqual(stream, fileStream);
+        }
+
+        [Fact]
+        public void TryReadAbsentContent()
+        {
+            var hash = Hash.Parse("40613A45BC715AE4A34895CBDD6122E982FE3DF5");
+
+            Stream stream;
+            Assert.False(_store.TryRead(hash, out stream));
+        }
+
+        [Fact]
+        public async void TryReadExistingContent()
+        {
+            Stream stream = TestUtil.GetRandomData(1024);
+
+            var hash = await _store.WriteAsync(stream);
+
+            stream.Position = 0;
+
+            Stream storedStream;
+            Assert.True(_store.TryRead(hash, out storedStream));
+
+            using (storedStream)
+                TestUtil.AssertStreamsEqual(stream, storedStream);
+        }
+    }
+}
