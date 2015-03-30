@@ -28,7 +28,6 @@ namespace Cassette
     {
         private const int Sha1StringLength = 40;
         private const int Sha1ByteCount = 20;
-        // TODO add TryParse
 
         /// <summary>
         /// Convert <paramref name="hash"/> into a hexadecimal string.
@@ -68,6 +67,32 @@ namespace Cassette
                 .Where(x => x%2 == 0)
                 .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
                 .ToArray();
+        }
+
+        /// <summary>
+        /// Attempt to parse the hexadecimal string <paramref name="hex"/> into a byte array.
+        /// </summary>
+        /// <returns><c>true</c> if the parse was successful, otherwise <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="hex"/> is <c>null</c>.</exception>
+        [Pure]
+        public static bool TryParse(string hex, out byte[] hash)
+        {
+            if (hex == null || hex.Length != Sha1StringLength)
+            {
+                hash = null;
+                return false;
+            }
+
+            try
+            {
+                hash = Parse(hex);
+                return true;
+            }
+            catch
+            {
+                hash = null;
+                return false;
+            }
         }
     }
 }
