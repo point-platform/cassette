@@ -30,10 +30,10 @@ namespace Cassette
         /// Write data to the store.
         /// </summary>
         /// <param name="stream">A stream from which the data to be written can be read.</param>
-        /// <param name="ct">An optional cancellation token which may be used to cancel the asynchronous write operation.</param>
+        /// <param name="cancellationToken">An optional cancellation token which may be used to cancel the asynchronous write operation.</param>
         /// <returns>An async task, the result of which is the written content's hash.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
-        Task<byte[]> WriteAsync(Stream stream, CancellationToken ct = new CancellationToken());
+        Task<byte[]> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
         /// Gets a value indicating whether an object exists in the store with the specified <paramref name="hash"/>.

@@ -55,7 +55,7 @@ namespace Cassette
                 Directory.CreateDirectory(_contentPath);
         }
 
-        public async Task<byte[]> WriteAsync(Stream stream, CancellationToken ct = new CancellationToken())
+        public async Task<byte[]> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken())
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
@@ -82,7 +82,7 @@ namespace Cassette
                     while (true)
                     {
                         // Read a chunk of data into the buffer
-                        var readCount = await stream.ReadAsync(buffer, 0, BufferSize, ct);
+                        var readCount = await stream.ReadAsync(buffer, 0, BufferSize, cancellationToken);
 
                         // If the stream has ended, break
                         if (readCount == 0)
@@ -92,7 +92,7 @@ namespace Cassette
                         hashBuilder.TransformBlock(buffer, 0, readCount, buffer, 0);
 
                         // Write the source data chunk to the output file
-                        await fileStream.WriteAsync(buffer, 0, readCount, ct);
+                        await fileStream.WriteAsync(buffer, 0, readCount, cancellationToken);
                     }
 
                     // Finalise the hash computation
