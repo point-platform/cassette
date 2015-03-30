@@ -73,7 +73,6 @@ namespace Cassette
         /// Attempt to parse the hexadecimal string <paramref name="hex"/> into a byte array.
         /// </summary>
         /// <returns><c>true</c> if the parse was successful, otherwise <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="hex"/> is <c>null</c>.</exception>
         [Pure]
         public static bool TryParse(string hex, out byte[] hash)
         {
