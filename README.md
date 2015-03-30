@@ -1,8 +1,8 @@
-# Cassette
+![Cassette](Cassette.png)
 
 [![Cassette NuGet version](https://img.shields.io/nuget/v/DrewNoakes.Cassette.svg)](https://www.nuget.org/packages/DrewNoakes.Cassette/)
 
-_Cassette_ is a simple content-addressable storage system for .NET 4.5.
+Cassette is a simple content-addressable storage system for .NET 4.5.
 
 Content-addressable storage (CAS) is a fast and efficient mechanism for storing and retrieving fixed data on disk.
 
