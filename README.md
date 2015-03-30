@@ -10,7 +10,7 @@ Information is uniquely and unambiguously identified by the SHA-1 hash of its co
 
 ```csharp
 // Create a store, backed by the specified file system location
-var cassette = new ContentAddressableStore(@"c:\cassette-data");
+var cassette = new ContentAddressableStore(@"c:\cassette-data\");
 
 // Store some content, obtaining its hash (content address)
 byte[] hash = await cassette.WriteAsync(writeStream);
