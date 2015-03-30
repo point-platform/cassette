@@ -26,6 +26,8 @@ namespace Cassette
     /// </summary>
     public static class Hash
     {
+        private const int Sha1StringLength = 40;
+        private const int Sha1ByteCount = 20;
         // TODO add TryParse
 
         /// <summary>
@@ -34,9 +36,15 @@ namespace Cassette
         /// <remarks>
         /// An example of this string is <c>40613A45BC715AE4A34895CBDD6122E982FE3DF5</c>.
         /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <c>null</c>.</exception>
         [Pure]
         public static string Format(byte[] hash)
         {
+            if (hash == null)
+                throw new ArgumentNullException("hash");
+            if (hash.Length != Sha1ByteCount)
+                throw new ArgumentException("Incorrect number of bytes", "hash");
+
             var s = new StringBuilder();
             foreach (var b in hash)
                 s.Append(b.ToString("X2"));
@@ -46,11 +54,15 @@ namespace Cassette
         /// <summary>
         /// Parse the hexadecimal string <paramref name="hex"/> into a byte array.
         /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="hex"/> is <c>null</c>.</exception>
         [Pure]
         public static byte[] Parse(string hex)
         {
-            if (hex.Length%2 == 1)
-                throw new ArgumentException("Must have an even number of characters", "hex");
+            if (hex == null)
+                throw new ArgumentNullException("hex");
+
+            if (hex.Length != Sha1StringLength)
+                throw new ArgumentException("Incorrect number of characters", "hex");
 
             return Enumerable.Range(0, hex.Length)
                 .Where(x => x%2 == 0)
