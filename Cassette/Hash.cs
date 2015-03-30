@@ -30,7 +30,7 @@ namespace Cassette
         private const int Sha1ByteCount = 20;
 
         /// <summary>
-        /// Convert <paramref name="hash"/> into a hexadecimal string.
+        /// Convert <paramref name="hash"/> into a 40 character hexadecimal string.
         /// </summary>
         /// <remarks>
         /// An example of this string is <c>40613A45BC715AE4A34895CBDD6122E982FE3DF5</c>.
@@ -51,7 +51,7 @@ namespace Cassette
         }
 
         /// <summary>
-        /// Parse the hexadecimal string <paramref name="hex"/> into a byte array.
+        /// Parse the hexadecimal string <paramref name="hex"/> into a 20 element byte array.
         /// </summary>
         /// <exception cref="ArgumentNullException"><paramref name="hex"/> is <c>null</c>.</exception>
         [Pure]
@@ -70,7 +70,7 @@ namespace Cassette
         }
 
         /// <summary>
-        /// Attempt to parse the hexadecimal string <paramref name="hex"/> into a byte array.
+        /// Attempt to parse the hexadecimal string <paramref name="hex"/> into a 20 element byte array.
         /// </summary>
         /// <returns><c>true</c> if the parse was successful, otherwise <c>false</c>.</returns>
         [Pure]
