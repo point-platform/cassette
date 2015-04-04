@@ -18,6 +18,7 @@ using System;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Cassette
 {
@@ -28,6 +29,8 @@ namespace Cassette
     {
         private const int Sha1StringLength = 40;
         private const int Sha1ByteCount = 20;
+
+        private static readonly Regex _hashRegex = new Regex("[0-9a-fA-F]{" + Sha1StringLength + "}", RegexOptions.Compiled);
 
         /// <summary>
         /// Convert <paramref name="hash"/> into a 40 character hexadecimal string.
@@ -92,6 +95,15 @@ namespace Cassette
                 hash = null;
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Get a value indicating whether <paramref name="hash"/> is a valid hexadecimal hash string.
+        /// </summary>
+        [Pure]
+        public static bool IsValid(string hash)
+        {
+            return hash != null && _hashRegex.IsMatch(hash);
         }
     }
 }
