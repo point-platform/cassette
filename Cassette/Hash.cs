@@ -104,10 +104,21 @@ namespace Cassette
         /// <summary>
         /// Get a value indicating whether <paramref name="hash"/> is a valid hexadecimal hash string.
         /// </summary>
+        /// <remarks>This method verifies that <paramref name="hash"/> is not <c>null</c> and has the correct length.</remarks>
         [Pure]
         public static bool IsValid(string hash)
         {
             return hash != null && _hashRegex.IsMatch(hash);
+        }
+
+        /// <summary>
+        /// Get a value indicating whether <paramref name="hash"/> is a valid hash array.
+        /// </summary>
+        /// <remarks>This method verifies <paramref name="hash"/> is not <c>null</c> and has the correct length.</remarks>
+        [Pure]
+        public static bool IsValid(byte[] hash)
+        {
+            return hash != null && hash.Length == Sha1ByteCount;
         }
 
         /// <summary>
