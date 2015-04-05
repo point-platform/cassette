@@ -147,5 +147,34 @@ namespace Cassette
 
             return _hashFunction.ComputeHash(stream);
         }
+
+        /// <summary>
+        /// Performs an element-wise comparison of the two hash arrays.
+        /// </summary>
+        /// <param name="hash1">The first hash to test for equality.</param>
+        /// <param name="hash2">The second hash to test for equality.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="hash1"/> or <paramref name="hash2"/> are <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="hash1"/> or <paramref name="hash2"/> have invalid length.</exception>
+        /// <returns><c>true</c> if the hashes are equal, otherwise <c>false</c>.</returns>
+        [Pure]
+        public static bool Equals(byte[] hash1, byte[] hash2)
+        {
+            if (hash1 == null)
+                throw new ArgumentNullException("hash1");
+            if (hash2 == null)
+                throw new ArgumentNullException("hash2");
+            if (hash1.Length != Sha1ByteCount)
+                throw new ArgumentOutOfRangeException("hash1", "Has invalid length.");
+            if (hash2.Length != Sha1ByteCount)
+                throw new ArgumentOutOfRangeException("hash1", "Has invalid length.");
+
+            for (var i = 0; i < Sha1ByteCount; i++)
+            {
+                if (hash1[i] != hash2[i])
+                    return false;
+            }
+
+            return true;
+        }
     }
 }
