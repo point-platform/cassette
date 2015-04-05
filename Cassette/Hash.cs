@@ -16,7 +16,9 @@
 
 using System;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -31,6 +33,8 @@ namespace Cassette
         private const int Sha1ByteCount = 20;
 
         private static readonly Regex _hashRegex = new Regex("[0-9a-fA-F]{" + Sha1StringLength + "}", RegexOptions.Compiled);
+
+        private static readonly SHA1 _hashFunction = new SHA1CryptoServiceProvider();
 
         /// <summary>
         /// Convert <paramref name="hash"/> into a 40 character hexadecimal string.
@@ -104,6 +108,33 @@ namespace Cassette
         public static bool IsValid(string hash)
         {
             return hash != null && _hashRegex.IsMatch(hash);
+        }
+
+        /// <summary>
+        /// Compute the hash over the contents of <paramref name="path"/>.
+        /// </summary>
+        /// <param name="path">The path of a file to process.</param>
+        /// <returns>The hash of <paramref name="path"/>'s contents.</returns>
+        public static byte[] Compute(string path)
+        {
+            if (path == null)
+                throw new ArgumentNullException("path");
+
+            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan))
+                return Compute(fileStream);
+        }
+
+        /// <summary>
+        /// Compute the hash over the contents of <paramref name="stream" />.
+        /// </summary>
+        /// <param name="stream">The stream to process.</param>
+        /// <returns>The hash of <paramref name="stream"/>'s contents.</returns>
+        public static byte[] Compute(Stream stream)
+        {
+            if (stream == null)
+                throw new ArgumentNullException("stream");
+
+            return _hashFunction.ComputeHash(stream);
         }
     }
 }
