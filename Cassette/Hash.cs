@@ -166,7 +166,7 @@ namespace Cassette
             if (hash1.Length != Sha1ByteCount)
                 throw new ArgumentOutOfRangeException("hash1", "Has invalid length.");
             if (hash2.Length != Sha1ByteCount)
-                throw new ArgumentOutOfRangeException("hash1", "Has invalid length.");
+                throw new ArgumentOutOfRangeException("hash2", "Has invalid length.");
 
             for (var i = 0; i < Sha1ByteCount; i++)
             {
