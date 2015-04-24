@@ -187,6 +187,23 @@ namespace Cassette
                    select Hash.Parse(directory + file);
         }
 
+        public bool Delete(byte[] hash)
+        {
+            string subPath;
+            string contentPath;
+            GetPaths(hash, out subPath, out contentPath);
+
+            if (!File.Exists(contentPath))
+                return false;
+
+            // Remove the read-only flag from the file
+            var attributes = File.GetAttributes(contentPath);
+            File.SetAttributes(contentPath, attributes & ~FileAttributes.ReadOnly);
+
+            File.Delete(contentPath);
+            return true;
+        }
+
         private void GetPaths(byte[] hashBytes, out string subPath, out string contentPath)
         {
             var hashString = Hash.Format(hashBytes);

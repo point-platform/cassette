@@ -68,5 +68,13 @@ namespace Cassette
         /// </remarks>
         /// <returns></returns>
         IEnumerable<byte[]> GetHashes();
+
+        /// <summary>
+        /// Attempt to delete an item of content.
+        /// </summary>
+        /// <param name="hash">The hash of the content to delete.</param>
+        /// <returns><c>true</c> if the content existed and was deleted, otherwise <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <c>null</c>.</exception>
+        bool Delete(byte[] hash);
     }
 }
