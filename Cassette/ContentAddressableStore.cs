@@ -72,7 +72,7 @@ namespace Cassette
             using (var hashBuilder = new SHA1CryptoServiceProvider())
             {
                 // Open the temp file for write
-                using (var fileStream = new FileStream(tempFile, 
+                using (var fileStream = new FileStream(tempFile,
                     FileMode.Open, FileAccess.Write, FileShare.None,
                     BufferSize, FileOptions.SequentialScan | FileOptions.Asynchronous))
                 {
@@ -163,7 +163,7 @@ namespace Cassette
                 return false;
             }
 
-            stream = new FileStream(contentPath, 
+            stream = new FileStream(contentPath,
                 FileMode.Open, FileAccess.Read, FileShare.Read,
                 BufferSize, (FileOptions)options);
 
