@@ -80,29 +80,39 @@ namespace Cassette
                     BufferSize, FileOptions.SequentialScan | FileOptions.Asynchronous))
                 {
                     // Allocate a buffer, used to process data in chunks
-                    var buffer = new byte[BufferSize];
+                    // We use parallel read/write for increased throughput which requires two buffers
+                    var buffers = new[] { new byte[BufferSize], new byte[BufferSize] };
 
-                    // TODO investigate parallel read/write in this loop, for increased throughput
+                    var bufferIndex = 0;
+                    var writeTask = (Task)null;
 
                     // Loop until the source stream is exhausted
                     while (true)
                     {
-                        // Read a chunk of data into the buffer
-                        var readCount = await stream.ReadAsync(buffer, 0, BufferSize, cancellationToken);
+                        // Swap buffers
+                        bufferIndex ^= 1;
+
+                        // Start read a chunk of data into the buffer asynchronously
+                        var readTask = stream.ReadAsync(buffers[bufferIndex], 0, BufferSize, cancellationToken);
+
+                        if (writeTask != null)
+                            await Task.WhenAll(readTask, writeTask);
+
+                        var readCount = readTask.Result;
 
                         // If the stream has ended, break
                         if (readCount == 0)
                             break;
 
                         // Integrate the source data chunk into the hash
-                        hashBuilder.TransformBlock(buffer, 0, readCount, buffer, 0);
+                        hashBuilder.TransformBlock(buffers[bufferIndex], 0, readCount, null, 0);
 
                         // Write the source data chunk to the output file
-                        await fileStream.WriteAsync(buffer, 0, readCount, cancellationToken);
+                        writeTask = fileStream.WriteAsync(buffers[bufferIndex], 0, readCount, cancellationToken);
                     }
 
                     // Finalise the hash computation
-                    hashBuilder.TransformFinalBlock(buffer, 0, 0);
+                    hashBuilder.TransformFinalBlock(buffers[bufferIndex], 0, 0);
                 }
 
                 // Retrieve the computed hash
