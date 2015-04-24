@@ -64,6 +64,15 @@ namespace Cassette
         bool TryRead(byte[] hash, out Stream stream, ReadOptions options = ReadOptions.None);
 
         /// <summary>
+        /// Get an item of content's length.
+        /// </summary>
+        /// <param name="hash">The hash of the content to measure.</param>
+        /// <param name="length">The lenght of the content in bytes.</param>
+        /// <returns><c>true</c> if the requested content exists, otherwise <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <c>null</c>.</exception>
+        bool TryGetContentLength(byte[] hash, out long length);
+
+        /// <summary>
         /// Get an enumeration over all hashes contained within the store.
         /// </summary>
         /// <remarks>

@@ -173,6 +173,25 @@ namespace Cassette
             return true;
         }
 
+        public bool TryGetContentLength(byte[] hash, out long length)
+        {
+            if (hash == null)
+                throw new ArgumentNullException("hash");
+
+            string subPath;
+            string contentPath;
+            GetPaths(hash, out subPath, out contentPath);
+
+            if (!File.Exists(contentPath))
+            {
+                length = 0;
+                return false;
+            }
+
+            length = new FileInfo(contentPath).Length;
+            return true;
+        }
+
         public IEnumerable<byte[]> GetHashes()
         {
             var topLevelRegex = new Regex("[0-9a-f]{" + HashPrefixLength + "}", RegexOptions.IgnoreCase);
