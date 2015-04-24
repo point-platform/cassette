@@ -28,8 +28,12 @@ namespace Cassette
     public interface IContentAddressableStore
     {
         /// <summary>
-        /// Write data to the store.
+        /// Write content to the store, returning its hash.
         /// </summary>
+        /// <remarks>
+        /// If the store already contains this content, the write is discarded but the hash is
+        /// returned, as normal.
+        /// </remarks>
         /// <param name="stream">A stream from which the data to be written can be read.</param>
         /// <param name="cancellationToken">An optional cancellation token which may be used to cancel the asynchronous write operation.</param>
         /// <returns>An async task, the result of which is the written content's hash.</returns>
@@ -37,7 +41,7 @@ namespace Cassette
         Task<byte[]> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
-        /// Gets a value indicating whether an object exists in the store with the specified <paramref name="hash"/>.
+        /// Gets a value indicating whether content exists in the store with the specified <paramref name="hash"/>.
         /// </summary>
         /// <param name="hash">The hash of the content to search for.</param>
         /// <returns><c>true</c> if the content exists in the store, otherwise <c>false</c>.</returns>
@@ -45,7 +49,7 @@ namespace Cassette
         bool Contains(byte[] hash);
 
         /// <summary>
-        /// Read data from the store.
+        /// Read content from the store.
         /// </summary>
         /// <remarks>
         /// When <c>true</c> is returned, <paramref name="stream"/> will be non-null and
