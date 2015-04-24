@@ -15,8 +15,11 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -168,6 +171,20 @@ namespace Cassette
                 BufferSize, (FileOptions)options);
 
             return true;
+        }
+
+        public IEnumerable<byte[]> GetHashes()
+        {
+            var topLevelRegex = new Regex("[0-9a-f]{" + HashPrefixLength + "}", RegexOptions.IgnoreCase);
+            var subLevelRegex = new Regex("[0-9a-f]{" + (Hash.StringLength - HashPrefixLength) + "}", RegexOptions.IgnoreCase);
+
+            var directories = Directory.GetDirectories(_contentPath).Select(Path.GetFileName).Where(d => topLevelRegex.IsMatch(d));
+
+            return from directory in directories
+                   let subPath = Path.Combine(_contentPath, directory)
+                   let files = Directory.GetFiles(subPath).Select(Path.GetFileName).Where(f => subLevelRegex.IsMatch(f))
+                   from file in files
+                   select Hash.Parse(directory + file);
         }
 
         private void GetPaths(byte[] hashBytes, out string subPath, out string contentPath)

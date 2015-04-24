@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,5 +58,15 @@ namespace Cassette
         /// <returns><c>true</c> if the content was found, otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <c>null</c>.</exception>
         bool TryRead(byte[] hash, out Stream stream, ReadOptions options = ReadOptions.None);
+
+        /// <summary>
+        /// Get an enumeration over all hashes contained within the store.
+        /// </summary>
+        /// <remarks>
+        /// This enumeration is computed lazily by querying the file system and therefore will
+        /// not behave deterministically if modified while enumerating.
+        /// </remarks>
+        /// <returns></returns>
+        IEnumerable<byte[]> GetHashes();
     }
 }
