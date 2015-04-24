@@ -50,7 +50,7 @@ namespace Cassette
         /// When <c>true</c> is returned, <paramref name="stream"/> will be non-null and
         /// must be disposed when finished with.
         /// </remarks>
-        /// <param name="hash">The hash of the content to retried.</param>
+        /// <param name="hash">The hash of the content to read.</param>
         /// <param name="stream">A stream from which the stored content may be read.</param>
         /// <param name="options">Optional parameters to control how data be read from disk.
         /// See the <see cref="ReadOptions"/> enum for further details.</param>
