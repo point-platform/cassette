@@ -36,6 +36,9 @@ namespace Cassette
         /// <summary>The size of the byte array buffer used for read/write operations.</summary>
         private const int BufferSize = 4096;
 
+        /// <summary>The number of characters from the hash to use for the name of the top level subdirectories.</summary>
+        private const int HashPrefixLength = 4;
+
         /// <summary>
         /// Initialises the store to use <paramref name="contentPath"/> as the root for all content.
         /// </summary>
@@ -170,8 +173,8 @@ namespace Cassette
         private void GetPaths(byte[] hashBytes, out string subPath, out string contentPath)
         {
             var hashString = Hash.Format(hashBytes);
-            subPath = Path.Combine(_contentPath, hashString.Substring(0, 4));
-            contentPath = Path.Combine(subPath, hashString.Substring(4));
+            subPath = Path.Combine(_contentPath, hashString.Substring(0, HashPrefixLength));
+            contentPath = Path.Combine(subPath, hashString.Substring(HashPrefixLength));
         }
     }
 }
