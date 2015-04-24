@@ -29,10 +29,17 @@ namespace Cassette
     /// </summary>
     public static class Hash
     {
-        private const int Sha1StringLength = 40;
-        private const int Sha1ByteCount = 20;
+        /// <summary>
+        /// The length of a hash in string form used by <see cref="Format"/> and <see cref="Parse"/>.
+        /// </summary>
+        public const int StringLength = 40;
 
-        private static readonly Regex _hashRegex = new Regex("[0-9a-fA-F]{" + Sha1StringLength + "}", RegexOptions.Compiled);
+        /// <summary>
+        /// The length of a hash in byte array form.
+        /// </summary>
+        public const int ByteCount = 20;
+
+        private static readonly Regex _hashRegex = new Regex("[0-9a-fA-F]{" + StringLength + "}", RegexOptions.Compiled);
 
         private static readonly SHA1 _hashFunction = new SHA1CryptoServiceProvider();
 
@@ -48,7 +55,7 @@ namespace Cassette
         {
             if (hash == null)
                 throw new ArgumentNullException("hash");
-            if (hash.Length != Sha1ByteCount)
+            if (hash.Length != ByteCount)
                 throw new ArgumentException("Incorrect number of bytes", "hash");
 
             var s = new StringBuilder();
@@ -67,7 +74,7 @@ namespace Cassette
             if (hex == null)
                 throw new ArgumentNullException("hex");
 
-            if (hex.Length != Sha1StringLength)
+            if (hex.Length != StringLength)
                 throw new ArgumentException("Incorrect number of characters", "hex");
 
             return Enumerable.Range(0, hex.Length)
@@ -83,7 +90,7 @@ namespace Cassette
         [Pure]
         public static bool TryParse(string hex, out byte[] hash)
         {
-            if (hex == null || hex.Length != Sha1StringLength)
+            if (hex == null || hex.Length != StringLength)
             {
                 hash = null;
                 return false;
@@ -118,7 +125,7 @@ namespace Cassette
         [Pure]
         public static bool IsValid(byte[] hash)
         {
-            return hash != null && hash.Length == Sha1ByteCount;
+            return hash != null && hash.Length == ByteCount;
         }
 
         /// <summary>
@@ -163,12 +170,12 @@ namespace Cassette
                 throw new ArgumentNullException("hash1");
             if (hash2 == null)
                 throw new ArgumentNullException("hash2");
-            if (hash1.Length != Sha1ByteCount)
+            if (hash1.Length != ByteCount)
                 throw new ArgumentOutOfRangeException("hash1", "Has invalid length.");
-            if (hash2.Length != Sha1ByteCount)
+            if (hash2.Length != ByteCount)
                 throw new ArgumentOutOfRangeException("hash2", "Has invalid length.");
 
-            for (var i = 0; i < Sha1ByteCount; i++)
+            for (var i = 0; i < ByteCount; i++)
             {
                 if (hash1[i] != hash2[i])
                     return false;
