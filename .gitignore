@@ -25,3 +25,7 @@ obj/
 _ReSharper*/
 [Tt]est[Rr]esult*
 packages/
+target/
+.project
+.classpath
+.settings
