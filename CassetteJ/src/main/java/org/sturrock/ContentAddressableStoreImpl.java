@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,12 +31,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
- * A content-addressable store backed by the file system.
- * Default implementation of ContentAddressableStore.
- *
+ * A content-addressable store backed by the file system. Default implementation
+ * of ContentAddressableStore.
+ * 
  */
 public final class ContentAddressableStoreImpl implements
 		ContentAddressableStore {
@@ -50,14 +50,16 @@ public final class ContentAddressableStoreImpl implements
 	private final int bufferSize = 4096;
 
 	/**
-	 * The number of characters from the hash to use for the name of
-	 * the top level subdirectories. 
+	 * The number of characters from the hash to use for the name of the top
+	 * level subdirectories.
 	 */
 	private final int hashPrefixLength = 4;
-	
+
 	/**
 	 * Initialises the store, using rootPath as the root for all content.
-	 * @param rootPath	Root path for all content in this store.
+	 * 
+	 * @param rootPath
+	 *            Root path for all content in this store.
 	 * @throws IOException
 	 */
 	public ContentAddressableStoreImpl(String rootPath) throws IOException {
@@ -147,14 +149,23 @@ public final class ContentAddressableStoreImpl implements
 		return attrs.size();
 	}
 
-	public List<byte[]> getHashes()
-	{
-		if(true)
-			throw new RuntimeException("Not implemented yet");
-		
-		return new LinkedList<byte[]>();
-	}
+	public List<byte[]> getHashes() throws IOException {
+		List<byte[]> hashes = new LinkedList<byte[]>();
 
+		DirectoryStream<Path> directories = Files.newDirectoryStream(rootPath,
+				"[0-9A-F]*");
+
+		for (Path directory : directories) {
+			DirectoryStream<Path> files = Files.newDirectoryStream(directory,
+					"[0-9A-F]*");
+			for (Path file : files) {
+				byte[] bytes = getHashBytes(directory.getFileName().toString()
+						+ file.getFileName().toString());
+				hashes.add(bytes);
+			}
+		}
+		return hashes;
+	}
 
 	public boolean delete(byte[] hash) throws IOException {
 		String hashString = getHashString(hash);
@@ -183,10 +194,20 @@ public final class ContentAddressableStoreImpl implements
 	private String getHashString(byte[] hash) {
 		Formatter formatter = new Formatter();
 		for (final byte b : hash) {
-			formatter.format("%02x", b);
+			formatter.format("%02X", b);
 		}
 		String hashString = formatter.toString();
 		formatter.close();
 		return hashString;
+	}
+
+	private byte[] getHashBytes(String string) {
+		int len = string.length();
+		byte[] data = new byte[len / 2];
+		for (int i = 0; i < len; i += 2) {
+			data[i / 2] = (byte) ((Character.digit(string.charAt(i), 16) << 4) + Character
+					.digit(string.charAt(i + 1), 16));
+		}
+		return data;
 	}
 }
