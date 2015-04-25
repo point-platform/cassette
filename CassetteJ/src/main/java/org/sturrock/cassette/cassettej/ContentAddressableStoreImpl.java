@@ -1,4 +1,4 @@
-package org.sturrock;
+package org.sturrock.cassette.cassettej;
 
 /*
  * Copyright 2015 Andy Sturrock
@@ -28,7 +28,6 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Formatter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -89,7 +88,7 @@ public final class ContentAddressableStoreImpl implements
 		final byte[] hash = messageDigest.digest();
 		stream.reset();
 
-		String hashString = getHashString(hash);
+		String hashString = Hash.getString(hash);
 
 		// Determine the location for the content file
 		Path contentPath = getContentPath(hashString);
@@ -113,7 +112,7 @@ public final class ContentAddressableStoreImpl implements
 		if (hash == null)
 			throw new IllegalArgumentException("hash");
 
-		String hashString = getHashString(hash);
+		String hashString = Hash.getString(hash);
 		Path contentPath = getContentPath(hashString);
 
 		return Files.exists(contentPath);
@@ -123,7 +122,7 @@ public final class ContentAddressableStoreImpl implements
 		if (hash == null)
 			throw new IllegalArgumentException("hash");
 
-		String hashString = getHashString(hash);
+		String hashString = Hash.getString(hash);
 		Path contentPath = getContentPath(hashString);
 
 		if (!Files.exists(contentPath)) {
@@ -137,7 +136,7 @@ public final class ContentAddressableStoreImpl implements
 		if (hash == null)
 			throw new IllegalArgumentException("hash");
 
-		String hashString = getHashString(hash);
+		String hashString = Hash.getString(hash);
 		Path contentPath = getContentPath(hashString);
 
 		if (!Files.exists(contentPath)) {
@@ -159,7 +158,7 @@ public final class ContentAddressableStoreImpl implements
 			DirectoryStream<Path> files = Files.newDirectoryStream(directory,
 					"[0-9A-F]*");
 			for (Path file : files) {
-				byte[] bytes = getHashBytes(directory.getFileName().toString()
+				byte[] bytes = Hash.getBytes(directory.getFileName().toString()
 						+ file.getFileName().toString());
 				hashes.add(bytes);
 			}
@@ -168,7 +167,7 @@ public final class ContentAddressableStoreImpl implements
 	}
 
 	public boolean delete(byte[] hash) throws IOException {
-		String hashString = getHashString(hash);
+		String hashString = Hash.getString(hash);
 		Path contentPath = getContentPath(hashString);
 
 		if (!Files.exists(contentPath))
@@ -189,25 +188,5 @@ public final class ContentAddressableStoreImpl implements
 		Path subPath = Paths.get(rootPath.toString(),
 				hashString.substring(0, hashPrefixLength));
 		return subPath;
-	}
-
-	private String getHashString(byte[] hash) {
-		Formatter formatter = new Formatter();
-		for (final byte b : hash) {
-			formatter.format("%02X", b);
-		}
-		String hashString = formatter.toString();
-		formatter.close();
-		return hashString;
-	}
-
-	private byte[] getHashBytes(String string) {
-		int len = string.length();
-		byte[] data = new byte[len / 2];
-		for (int i = 0; i < len; i += 2) {
-			data[i / 2] = (byte) ((Character.digit(string.charAt(i), 16) << 4) + Character
-					.digit(string.charAt(i + 1), 16));
-		}
-		return data;
 	}
 }

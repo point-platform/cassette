@@ -1,4 +1,4 @@
-package org.sturrock;
+package org.sturrock.cassette.cassettej;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -53,7 +53,7 @@ public interface ContentAddressableStore {
 	 * 
 	 * @param hash
 	 *            The hash of the content to read.
-	 * @return <code>InputStream</code> of content .
+	 * @return <code>InputStream</code> of content if content exists; otherwise <code>null</code>.
 	 * @throws FileNotFoundException
 	 */
 	InputStream read(byte[] hash) throws FileNotFoundException;
