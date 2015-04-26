@@ -26,7 +26,7 @@ public class ContentAddressableStoreImplTest extends TestCase {
 	private String helloWorldString = "Hello World";
 	// Precomputed sha1 hash of "Hello World"
 	private byte[] helloWorldHash = Hash
-					.getBytes("0A4D55A8D778E5022FAB701977C5D840BBC486D0");
+			.getBytes("0A4D55A8D778E5022FAB701977C5D840BBC486D0");
 
 	public ContentAddressableStoreImplTest(String testName) {
 		super(testName);
@@ -81,7 +81,7 @@ public class ContentAddressableStoreImplTest extends TestCase {
 	}
 
 	private byte[] writeHelloWorld() throws IOException {
-		
+
 		byte[] bytes = helloWorldString.getBytes(StandardCharsets.UTF_8);
 
 		InputStream stream = new ByteArrayInputStream(bytes);
@@ -122,14 +122,14 @@ public class ContentAddressableStoreImplTest extends TestCase {
 			fail(e.getMessage());
 		}
 	}
-	
+
 	public void testGetHashes() {
 		try {
 			writeHelloWorld();
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
-		
+
 		List<byte[]> hashes;
 		try {
 			hashes = cas.getHashes();
@@ -141,14 +141,14 @@ public class ContentAddressableStoreImplTest extends TestCase {
 			fail(e.getMessage());
 		}
 	}
-	
+
 	public void testRead() {
 		try {
 			writeHelloWorld();
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
-		
+
 		InputStream stream;
 		try {
 			stream = cas.read(helloWorldHash);
@@ -164,7 +164,7 @@ public class ContentAddressableStoreImplTest extends TestCase {
 			fail(e.getMessage());
 		}
 	}
-	
+
 	public void testDelete() {
 		try {
 			writeHelloWorld();
@@ -176,27 +176,27 @@ public class ContentAddressableStoreImplTest extends TestCase {
 			hashes = cas.getHashes();
 			// Should only be one piece of content
 			assertEquals(hashes.size(), 1);
-			
+
 			byte[] hash = hashes.get(0);
-			
+
 			cas.delete(hash);
-			
+
 			hashes = cas.getHashes();
 			// Now should be no content
 			assertEquals(hashes.size(), 0);
-			
+
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
 	}
 
-private static byte[] readFully(InputStream inputStream) throws IOException {
-	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	byte[] buffer = new byte[1024];
-	int length = 0;
-	while ((length = inputStream.read(buffer)) != -1) {
-		baos.write(buffer, 0, length);
+	private static byte[] readFully(InputStream inputStream) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1024];
+		int length = 0;
+		while ((length = inputStream.read(buffer)) != -1) {
+			baos.write(buffer, 0, length);
+		}
+		return baos.toByteArray();
 	}
-	return baos.toByteArray();
-}
 }
