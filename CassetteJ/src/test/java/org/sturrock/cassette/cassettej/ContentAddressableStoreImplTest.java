@@ -164,6 +164,31 @@ public class ContentAddressableStoreImplTest extends TestCase {
 			fail(e.getMessage());
 		}
 	}
+	
+	public void testDelete() {
+		try {
+			writeHelloWorld();
+		} catch (IOException e) {
+			fail(e.getMessage());
+		}
+		List<byte[]> hashes;
+		try {
+			hashes = cas.getHashes();
+			// Should only be one piece of content
+			assertEquals(hashes.size(), 1);
+			
+			byte[] hash = hashes.get(0);
+			
+			cas.delete(hash);
+			
+			hashes = cas.getHashes();
+			// Now should be no content
+			assertEquals(hashes.size(), 0);
+			
+		} catch (IOException e) {
+			fail(e.getMessage());
+		}
+	}
 
 private static byte[] readFully(InputStream inputStream) throws IOException {
 	ByteArrayOutputStream baos = new ByteArrayOutputStream();
