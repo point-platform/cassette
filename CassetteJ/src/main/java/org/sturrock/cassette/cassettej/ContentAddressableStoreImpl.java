@@ -30,6 +30,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.List;
+import java.nio.file.StandardCopyOption;
 
 /**
  * A content-addressable store backed by the file system. Default implementation
@@ -71,9 +72,18 @@ public final class ContentAddressableStoreImpl implements
 			Files.createDirectory(this.rootPath);
 	}
 
-	public byte[] write(InputStream stream) throws IOException {
-		if (stream == null)
-			throw new IllegalArgumentException("stream");
+	public byte[] write(InputStream inputStream) throws IOException {
+		if (inputStream == null)
+			throw new IllegalArgumentException("inputStream");
+
+		Path tmpFile = Files.createTempFile("CassetteJ", ".tmp");
+		try {
+			Files.copy(inputStream, tmpFile, StandardCopyOption.REPLACE_EXISTING);
+		}
+		catch(Exception e) {
+			Files.delete(tmpFile);
+			throw new IOException(e);
+		}
 
 		MessageDigest messageDigest;
 		try {
@@ -81,12 +91,19 @@ public final class ContentAddressableStoreImpl implements
 		} catch (NoSuchAlgorithmException e) {
 			throw new IllegalArgumentException(e);
 		}
-		final byte[] buffer = new byte[bufferSize];
-		for (int read = 0; (read = stream.read(buffer)) != -1;) {
-			messageDigest.update(buffer, 0, read);
+
+		InputStream fileInputStream = new FileInputStream(tmpFile.toFile());
+		int n = 0;
+		byte[] buffer = new byte[bufferSize];
+		while (n != -1) {
+			n = fileInputStream.read(buffer);
+			if (n > 0) {
+				messageDigest.update(buffer, 0, n);
+			}
 		}
+		fileInputStream.close();
+
 		final byte[] hash = messageDigest.digest();
-		stream.reset();
 
 		String hashString = Hash.getString(hash);
 
@@ -100,7 +117,9 @@ public final class ContentAddressableStoreImpl implements
 			if (!Files.isDirectory(subPath))
 				Files.createDirectories(subPath);
 
-			Files.copy(stream, contentPath);
+			Files.move(tmpFile, contentPath, StandardCopyOption.ATOMIC_MOVE);
+		} else {
+			Files.delete(tmpFile);
 		}
 
 		// The caller receives the hash, regardless of whether the
