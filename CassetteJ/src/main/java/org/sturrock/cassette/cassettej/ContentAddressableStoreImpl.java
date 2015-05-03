@@ -69,7 +69,7 @@ public final class ContentAddressableStoreImpl implements
 		this.rootPath = Paths.get(rootPath);
 
 		if (!Files.isDirectory(this.rootPath))
-			Files.createDirectory(this.rootPath);
+			Files.createDirectories(this.rootPath);
 	}
 
 	public byte[] write(InputStream inputStream) throws IOException {
