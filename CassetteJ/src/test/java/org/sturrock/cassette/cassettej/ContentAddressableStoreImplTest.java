@@ -85,7 +85,9 @@ public class ContentAddressableStoreImplTest extends TestCase {
 		byte[] bytes = helloWorldString.getBytes(StandardCharsets.UTF_8);
 
 		InputStream stream = new ByteArrayInputStream(bytes);
-		return cas.write(stream);
+		byte[] hash = cas.write(stream);
+		stream.close();
+		return hash;
 	}
 
 	public void testWrite() {
@@ -149,15 +151,15 @@ public class ContentAddressableStoreImplTest extends TestCase {
 			fail(e.getMessage());
 		}
 
-		InputStream stream;
 		try {
-			stream = cas.read(helloWorldHash);
-			if (stream == null)
-				fail("Content not found");
-			String content = new String(readFully(stream),
-					StandardCharsets.UTF_8);
-			// Content should be Hello World
-			assertEquals(helloWorldString, content);
+			try(InputStream stream = cas.read(helloWorldHash);) {
+				if (stream == null)
+					fail("Content not found");
+				String content = new String(readFully(stream),
+						StandardCharsets.UTF_8);
+				// Content should be Hello World
+				assertEquals(helloWorldString, content);
+			}
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		} catch (IOException e) {

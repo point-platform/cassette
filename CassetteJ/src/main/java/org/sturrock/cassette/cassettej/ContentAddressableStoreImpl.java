@@ -25,12 +25,12 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.List;
-import java.nio.file.StandardCopyOption;
 
 /**
  * A content-addressable store backed by the file system. Default implementation
@@ -92,16 +92,16 @@ public final class ContentAddressableStoreImpl implements
 			throw new IllegalArgumentException(e);
 		}
 
-		InputStream fileInputStream = new FileInputStream(tmpFile.toFile());
-		int n = 0;
-		byte[] buffer = new byte[bufferSize];
-		while (n != -1) {
-			n = fileInputStream.read(buffer);
-			if (n > 0) {
-				messageDigest.update(buffer, 0, n);
+		try(InputStream fileInputStream = new FileInputStream(tmpFile.toFile());) {
+			int n = 0;
+			byte[] buffer = new byte[bufferSize];
+			while (n != -1) {
+				n = fileInputStream.read(buffer);
+				if (n > 0) {
+					messageDigest.update(buffer, 0, n);
+				}
 			}
 		}
-		fileInputStream.close();
 
 		final byte[] hash = messageDigest.digest();
 
@@ -167,22 +167,23 @@ public final class ContentAddressableStoreImpl implements
 		return attrs.size();
 	}
 
-	public List<byte[]> getHashes() throws IOException {
+	public List<byte[]> getHashes() throws IOException  {
 		List<byte[]> hashes = new LinkedList<byte[]>();
 
-		DirectoryStream<Path> directories = Files.newDirectoryStream(rootPath,
-				"[0-9A-F]*");
-
-		for (Path directory : directories) {
-			DirectoryStream<Path> files = Files.newDirectoryStream(directory,
-					"[0-9A-F]*");
-			for (Path file : files) {
-				byte[] bytes = Hash.getBytes(directory.getFileName().toString()
-						+ file.getFileName().toString());
-				hashes.add(bytes);
+		try(DirectoryStream<Path> directories = Files.newDirectoryStream(rootPath,
+				"[0-9A-F]*");) {
+				for (Path directory : directories) {
+					try(DirectoryStream<Path> files = Files.newDirectoryStream(directory,
+							"[0-9A-F]*");) {
+					for (Path file : files) {
+						byte[] bytes = Hash.getBytes(directory.getFileName().toString()
+								+ file.getFileName().toString());
+						hashes.add(bytes);
+					}
+				}
 			}
+			return hashes;
 		}
-		return hashes;
 	}
 
 	public boolean delete(byte[] hash) throws IOException {
