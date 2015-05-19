@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<package >
+<package>
   <metadata>
     <id>DrewNoakes.Cassette</id>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <title>Cassette - Content-addressable storage</title>
     <authors>Drew Noakes</authors>
     <owners>Drew Noakes</owners>
@@ -15,4 +15,7 @@
     <copyright>Copyright Drew Noakes 2015</copyright>
     <tags>ContentAddressableStorage Storage Database CAS</tags>
   </metadata>
+  <files>
+    <file src="bin\Release\Cassette.dll" target="lib\net45" />
+  </files>
 </package>
