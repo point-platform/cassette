@@ -8,10 +8,10 @@
     <owners>Drew Noakes</owners>
     <licenseUrl>https://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
     <projectUrl>https://github.com/drewnoakes/cassette</projectUrl>
-    <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
+    <iconUrl>https://raw.githubusercontent.com/drewnoakes/cassette/master/Cassette.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A simple content-addressable storage system for .NET 4.5.</description>
-    <releaseNotes>Initial release.</releaseNotes>
+<!--<releaseNotes>Initial release.</releaseNotes>-->
     <copyright>Copyright Drew Noakes 2015</copyright>
     <tags>ContentAddressableStorage Storage Database CAS</tags>
   </metadata>
