@@ -21,7 +21,7 @@ if (cassette.TryRead(hash, out readStream, ReadOptions.Asychronous | ReadOptions
     {
         // Read the stored content via the returned read-only stream
         var buffer = new byte[4096];
-        var bytesWritten = await readStream.ReadAsync(buffer, 0, buffer.Length);
+        var bytesRead = await readStream.ReadAsync(buffer, 0, buffer.Length);
         // ...
     }
 }
