@@ -1,5 +1,6 @@
 ![Cassette](Cassette.png)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/hpn8g6tyj5luidcp?svg=true)](https://ci.appveyor.com/project/drewnoakes/cassette)
 [![Cassette NuGet version](https://img.shields.io/nuget/v/DrewNoakes.Cassette.svg)](https://www.nuget.org/packages/DrewNoakes.Cassette/)
 
 Cassette is a simple and efficient content-addressable storage system for .NET 4.5.
