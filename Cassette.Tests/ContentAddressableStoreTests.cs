@@ -16,6 +16,8 @@
 
 using System;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using Xunit;
 
 namespace Cassette.Tests
@@ -142,6 +144,48 @@ namespace Cassette.Tests
 
             using (storedStream)
                 TestUtil.AssertStreamsEqual(stream, storedStream);
+        }
+
+        [Fact]
+        public async void StoringWithEncoding()
+        {
+            var stream = TestUtil.GetRandomData(4096, keepBits: 4);
+            var hash = await _store.WriteAsync(stream, encodings: new[] { new GZipContentEncoding() });
+
+            var actualHashString = Hash.Format(hash);
+            var subpath = Path.Combine(_contentPath, actualHashString.Substring(0, 4));
+            var contentPath = Path.Combine(subpath, actualHashString.Substring(4));
+
+            Assert.True(File.Exists(contentPath));
+            Assert.True(File.Exists(contentPath + ".gzip"));
+
+            Assert.True(_store.Contains(hash));
+            Assert.True(_store.Contains(hash, "gzip"));
+            Assert.False(_store.Contains(hash, "deflate"));
+
+            long length;
+
+            Assert.True(_store.TryGetContentLength(hash, out length));
+            Assert.Equal(4096L, length);
+
+            Assert.True(_store.TryGetContentLength(hash, out length, "gzip"));
+            Assert.InRange(length, 1L, 4096L - 1);
+
+            Assert.Equal(hash, _store.GetHashes().SingleOrDefault());
+
+            Stream readStream;
+            Assert.True(_store.TryRead(hash, out readStream));
+            readStream.Dispose();
+
+            Assert.True(_store.TryRead(hash, out readStream, encodingName: "gzip"));
+            readStream.Dispose();
+
+            Assert.False(_store.TryRead(hash, out readStream, encodingName: "deflate"));
+
+            Assert.True(_store.Delete(hash));
+
+            Assert.False(File.Exists(contentPath));
+            Assert.False(File.Exists(contentPath + ".gzip"));
         }
     }
 }

@@ -129,3 +129,22 @@ If the length of stored content is to be retrieved, it is most efficient to use 
 ## Enumerating content
 
 The complete set of hashes is returned via `GetHashes`. This method computes the enumerable lazily by walking the file system so is thread-safe with respect to reads and writes. However it cannot be relied upon to behave deterministically if enumerating while content is being written or deleted. Whether new or deleted content is included in an enumeration whose processing spans the write/delete may or may not contain the affected content.
+
+## Encoding
+
+Version 0.3 adds support for encoding stored content. The primary use case for this is to store pre-compressed data whereby the cost of compressing content is taken upfront once at write time, rather than for each read.
+
+Content may be stored in multiple encodings. For example, an HTTP server may support both no encoding, or GZIP content/transfer encoding. Such an HTTP handler could request either encoding from the store depending upon request headers.
+
+    // instantiate a content encoding
+    var gzipEncoding = new GZipContentEncoding();
+
+	// write some (unencoded) content to the store, and request an encoded copy be stored
+    var hash = await store.WriteAsync(stream, encodings: new[] { gzipEncoding });
+
+	// read the encoded content out directly
+    Stream gzipStream;
+    if (store.TryRead(hash, out gzipStream, encodingName: gzipEncoding.Name))
+	{
+	    // use the gzipped data directly
+	}

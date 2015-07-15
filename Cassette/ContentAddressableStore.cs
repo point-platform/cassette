@@ -61,7 +61,7 @@ namespace Cassette
                 Directory.CreateDirectory(_contentPath);
         }
 
-        public async Task<byte[]> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<byte[]> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken(), IEnumerable<IContentEncoding> encodings = null)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
@@ -121,7 +121,7 @@ namespace Cassette
                 // Determine the location for the content file
                 string subPath;
                 string contentPath;
-                GetPaths(hash, out subPath, out contentPath);
+                GetPaths(hash, null, out subPath, out contentPath);
 
                 // Test whether a file already exists for this hash
                 if (File.Exists(contentPath))
@@ -143,32 +143,58 @@ namespace Cassette
                     File.SetAttributes(contentPath, FileAttributes.ReadOnly);
                 }
 
+                // Write any encoded forms of the content too
+                if (encodings != null)
+                {
+                    foreach (var encoding in encodings)
+                    {
+                        var encodedContentPath = contentPath + "." + encoding.Name;
+
+                        if (File.Exists(encodedContentPath))
+                            continue;
+
+                        // Create a new temporary file for the encoded content
+                        tempFile = Path.GetTempFileName();
+
+                        using (var inputStream = new FileStream(contentPath,
+                            FileMode.Open, FileAccess.Read, FileShare.Read,
+                            BufferSize, FileOptions.SequentialScan | FileOptions.Asynchronous))
+                        using (var outputStream = new FileStream(tempFile,
+                            FileMode.Open, FileAccess.Write, FileShare.None,
+                            BufferSize, FileOptions.SequentialScan | FileOptions.Asynchronous))
+                        using (var encodedOutputStream = encoding.Encode(outputStream))
+                        {
+                            await inputStream.CopyToAsync(encodedOutputStream, BufferSize, cancellationToken);
+                        }
+
+                        // Move the temporary file into its correct location
+                        File.Move(tempFile, encodedContentPath);
+
+                        // Set the read-only flag on the file
+                        File.SetAttributes(encodedContentPath, FileAttributes.ReadOnly);
+                    }
+                }
+
                 // The caller receives the hash, regardless of whether the
                 // file previously existed in the store
                 return hash;
             }
         }
 
-        public bool Contains(byte[] hash)
+        public bool Contains(byte[] hash, string encodingName = null)
         {
             if (hash == null)
                 throw new ArgumentNullException("hash");
 
-            string subPath;
-            string contentPath;
-            GetPaths(hash, out subPath, out contentPath);
-
-            return File.Exists(contentPath);
+            return File.Exists(GetContentPath(hash, encodingName));
         }
 
-        public bool TryRead(byte[] hash, out Stream stream, ReadOptions options = ReadOptions.None)
+        public bool TryRead(byte[] hash, out Stream stream, ReadOptions options = ReadOptions.None, string encodingName = null)
         {
             if (hash == null)
                 throw new ArgumentNullException("hash");
 
-            string subPath;
-            string contentPath;
-            GetPaths(hash, out subPath, out contentPath);
+            var contentPath = GetContentPath(hash, encodingName);
 
             if (!File.Exists(contentPath))
             {
@@ -183,14 +209,12 @@ namespace Cassette
             return true;
         }
 
-        public bool TryGetContentLength(byte[] hash, out long length)
+        public bool TryGetContentLength(byte[] hash, out long length, string encodingName = null)
         {
             if (hash == null)
                 throw new ArgumentNullException("hash");
 
-            string subPath;
-            string contentPath;
-            GetPaths(hash, out subPath, out contentPath);
+            var contentPath = GetContentPath(hash, encodingName);
 
             if (!File.Exists(contentPath))
             {
@@ -218,26 +242,54 @@ namespace Cassette
 
         public bool Delete(byte[] hash)
         {
-            string subPath;
-            string contentPath;
-            GetPaths(hash, out subPath, out contentPath);
+            var hashString = Hash.Format(hash);
+            var subPath = GetSubPath(hashString);
 
-            if (!File.Exists(contentPath))
+            var files = Directory.GetFiles(subPath, hashString.Substring(HashPrefixLength) + ".*", SearchOption.TopDirectoryOnly);
+
+            if (files.Length == 0)
                 return false;
 
-            // Remove the read-only flag from the file
-            var attributes = File.GetAttributes(contentPath);
-            File.SetAttributes(contentPath, attributes & ~FileAttributes.ReadOnly);
+            foreach (var file in files)
+            {
+                // Remove the read-only flag from the file
+                var attributes = File.GetAttributes(file);
+                File.SetAttributes(file, attributes & ~FileAttributes.ReadOnly);
 
-            File.Delete(contentPath);
+                // Delete the file
+                File.Delete(file);
+            }
+
             return true;
         }
 
-        private void GetPaths(byte[] hashBytes, out string subPath, out string contentPath)
+        #region Computing paths
+
+        private void GetPaths(byte[] hashBytes, string encodingName, out string subPath, out string contentPath)
         {
             var hashString = Hash.Format(hashBytes);
-            subPath = Path.Combine(_contentPath, hashString.Substring(0, HashPrefixLength));
+            subPath = GetSubPath(hashString);
             contentPath = Path.Combine(subPath, hashString.Substring(HashPrefixLength));
+            if (encodingName != null)
+                contentPath += "." + encodingName;
         }
+
+        private string GetContentPath(byte[] hash, string encodingName = null)
+        {
+            var hashString = Hash.Format(hash);
+            var subPath = GetSubPath(hashString);
+            var contentPath = Path.Combine(subPath, hashString.Substring(HashPrefixLength));
+            return encodingName != null
+                ? contentPath + "." + encodingName
+                : contentPath;
+        }
+
+        private string GetSubPath(string hashString)
+        {
+            var subPath = Path.Combine(_contentPath, hashString.Substring(0, HashPrefixLength));
+            return subPath;
+        }
+
+        #endregion
     }
 }
