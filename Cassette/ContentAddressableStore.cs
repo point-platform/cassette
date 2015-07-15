@@ -204,8 +204,8 @@ namespace Cassette
 
         public IEnumerable<byte[]> GetHashes()
         {
-            var topLevelRegex = new Regex("[0-9a-f]{" + HashPrefixLength + "}", RegexOptions.IgnoreCase);
-            var subLevelRegex = new Regex("[0-9a-f]{" + (Hash.StringLength - HashPrefixLength) + "}", RegexOptions.IgnoreCase);
+            var topLevelRegex = new Regex("^[0-9a-f]{" + HashPrefixLength + "}$", RegexOptions.IgnoreCase);
+            var subLevelRegex = new Regex("^[0-9a-f]{" + (Hash.StringLength - HashPrefixLength) + "}$", RegexOptions.IgnoreCase);
 
             var directories = Directory.GetDirectories(_contentPath).Select(Path.GetFileName).Where(d => topLevelRegex.IsMatch(d));
 
