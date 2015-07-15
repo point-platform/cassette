@@ -45,6 +45,6 @@ namespace Cassette
         /// <summary>
         /// Indicates that content will be read asynchronously via <see cref="Stream.ReadAsync(byte[],int,int)"/>.
         /// </summary>
-        Asynchronous = FileOptions.Asynchronous,
+        Asynchronous = FileOptions.Asynchronous
     }
 }
