@@ -14,14 +14,14 @@ var cassette = new ContentAddressableStore(@"c:\cassette-data\");
 byte[] hash = await cassette.WriteAsync(writeStream);
 
 // Later, use the hash to look up the content
-Stream readStream;
-if (cassette.TryRead(hash, out readStream, ReadOptions.Asychronous | ReadOptions.SequentialScan))
+Stream stream;
+if (cassette.TryRead(hash, out stream, ReadOptions.Asychronous | ReadOptions.SequentialScan))
 {
-    using (readStream)
+    using (stream)
     {
         // Read the stored content via the returned read-only stream
         var buffer = new byte[4096];
-        var bytesRead = await readStream.ReadAsync(buffer, 0, buffer.Length);
+        var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
         // ...
     }
 }
@@ -136,15 +136,20 @@ Version 0.3 adds support for encoding stored content. The primary use case for t
 
 Content may be stored in multiple encodings. For example, an HTTP server may support both no encoding, or GZIP content/transfer encoding. Such an HTTP handler could request either encoding from the store depending upon request headers.
 
-    // instantiate a content encoding
-    var gzipEncoding = new GZipContentEncoding();
+```csharp
+// Instantiate a content encoding
+var gzipEncoding = new GZipContentEncoding();
 
-	// write some (unencoded) content to the store, and request an encoded copy be stored
-    var hash = await store.WriteAsync(stream, encodings: new[] { gzipEncoding });
+// Write some (unencoded) content to the store, and request an encoded copy be stored
+var hash = await store.WriteAsync(stream, encodings: new[] { gzipEncoding });
 
-	// read the encoded content out directly
-    Stream gzipStream;
-    if (store.TryRead(hash, out gzipStream, encodingName: gzipEncoding.Name))
-	{
-	    // use the gzipped data directly
-	}
+// Read the encoded content out directly
+Stream gzipStream;
+if (store.TryRead(hash, out gzipStream, encodingName: gzipEncoding.Name))
+{
+    using (gzipStream)
+    {
+        // Use the GZipped data directly
+    }
+}
+```
