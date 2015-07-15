@@ -38,11 +38,20 @@ namespace Cassette.Tests
             }
         }
 
-        public static MemoryStream GetRandomData(int count)
+        public static MemoryStream GetRandomData(int count, int keepBits = 8)
         {
             var stream = new MemoryStream();
             var bytes = new byte[count];
+
             _random.GetBytes(bytes);
+
+            if (keepBits < 8)
+            {
+                var mask = (byte)((1 << keepBits) - 1);
+                for (var i = 0; i < bytes.Length; i++)
+                    bytes[i] &= mask;
+            }
+
             stream.Write(bytes, 0, bytes.Length);
             stream.Position = 0;
             return stream;
