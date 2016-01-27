@@ -49,7 +49,14 @@ namespace Cassette
         /// If <paramref name="contentPath"/> does not exist, it is created.
         /// </remarks>
         /// <param name="contentPath">The root for all content.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="contentPath"/> is <c>null</c>.</exception>
+        /// <exception cref="T:System.IO.IOException">The directory specified by <paramref name="contentPath"/> is a file.-or-The network name is not known.</exception>
+        /// <exception cref="T:System.UnauthorizedAccessException">The caller does not have the required permission.</exception>
+        /// <exception cref="T:System.ArgumentException"><paramref name="contentPath"/> is a zero-length string, contains only white space, or contains one or more invalid characters.-or-<paramref name="contentPath"/> is prefixed with, or contains, only a colon character (:).</exception>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="contentPath"/> is null.</exception>
+        /// <exception cref="T:System.IO.PathTooLongException">The specified path, file name, or both exceed the system-defined maximum length.</exception>
+        /// <exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid (for example, it is on an unmapped drive).</exception>
+        /// <exception cref="T:System.NotSupportedException"><paramref name="contentPath"/> contains a colon character (:) that is not part of a drive label ("C:\").</exception>
+        /// <PermissionSet><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/></PermissionSet>
         public ContentAddressableStore(string contentPath)
         {
             if (contentPath == null)
