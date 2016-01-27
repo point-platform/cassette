@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A simple content-addressable storage system for .NET 4.5.</description>
 <!--<releaseNotes>Initial release.</releaseNotes>-->
-    <copyright>Copyright Drew Noakes 2015</copyright>
+    <copyright>Copyright Drew Noakes 2015-2016</copyright>
     <tags>ContentAddressableStorage Storage Database CAS</tags>
   </metadata>
   <files>
