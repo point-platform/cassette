@@ -24,7 +24,7 @@ namespace Cassette
     /// </summary>
     public sealed class DeflateContentEncoding : IContentEncoding
     {
-        public string Name { get { return "deflate"; } }
+        public string Name => "deflate";
 
         /// <summary>
         /// Get and set the compression level to use when writing content.

@@ -24,7 +24,7 @@ namespace Cassette
     /// </summary>
     public sealed class GZipContentEncoding : IContentEncoding
     {
-        public string Name { get { return "gzip"; } }
+        public string Name => "gzip";
 
         /// <summary>
         /// Get and set the compression level to use when writing content.
