@@ -40,6 +40,8 @@ namespace Cassette
 
                 var code = (int)0x811c9dc5;
 
+		        // ReSharper disable once LoopCanBeConvertedToQuery
+		        // ReSharper disable once ForCanBeConvertedToForeach
 			    for (var i = 0; i < hash.Length; i++)
 				    code = (code ^ hash[i]) * p;
 
