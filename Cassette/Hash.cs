@@ -54,9 +54,9 @@ namespace Cassette
         public static string Format(byte[] hash)
         {
             if (hash == null)
-                throw new ArgumentNullException("hash");
+                throw new ArgumentNullException(nameof(hash));
             if (hash.Length != ByteCount)
-                throw new ArgumentException("Incorrect number of bytes", "hash");
+                throw new ArgumentException("Incorrect number of bytes", nameof(hash));
 
             var s = new StringBuilder();
             foreach (var b in hash)
@@ -72,10 +72,10 @@ namespace Cassette
         public static byte[] Parse(string hex)
         {
             if (hex == null)
-                throw new ArgumentNullException("hex");
+                throw new ArgumentNullException(nameof(hex));
 
             if (hex.Length != StringLength)
-                throw new ArgumentException("Incorrect number of characters", "hex");
+                throw new ArgumentException("Incorrect number of characters", nameof(hex));
 
             return Enumerable.Range(0, hex.Length)
                 .Where(x => x%2 == 0)
@@ -136,7 +136,7 @@ namespace Cassette
         public static byte[] Compute(string path)
         {
             if (path == null)
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
 
             using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan))
                 return Compute(fileStream);
@@ -150,7 +150,7 @@ namespace Cassette
         public static byte[] Compute(Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
 
             return _hashFunction.ComputeHash(stream);
         }
@@ -167,13 +167,13 @@ namespace Cassette
         public static bool Equals(byte[] hash1, byte[] hash2)
         {
             if (hash1 == null)
-                throw new ArgumentNullException("hash1");
+                throw new ArgumentNullException(nameof(hash1));
             if (hash2 == null)
-                throw new ArgumentNullException("hash2");
+                throw new ArgumentNullException(nameof(hash2));
             if (hash1.Length != ByteCount)
-                throw new ArgumentOutOfRangeException("hash1", "Has invalid length.");
+                throw new ArgumentOutOfRangeException(nameof(hash1), "Has invalid length.");
             if (hash2.Length != ByteCount)
-                throw new ArgumentOutOfRangeException("hash2", "Has invalid length.");
+                throw new ArgumentOutOfRangeException(nameof(hash2), "Has invalid length.");
 
             for (var i = 0; i < ByteCount; i++)
             {

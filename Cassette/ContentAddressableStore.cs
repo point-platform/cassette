@@ -53,7 +53,7 @@ namespace Cassette
         public ContentAddressableStore(string contentPath)
         {
             if (contentPath == null)
-                throw new ArgumentNullException("contentPath");
+                throw new ArgumentNullException(nameof(contentPath));
 
             _contentPath = contentPath;
 
@@ -64,7 +64,7 @@ namespace Cassette
         public async Task<byte[]> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken(), IEnumerable<IContentEncoding> encodings = null)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
 
             // Create a new, empty temporary file
             // We will write the source content into this file, whilst computing the content's hash
@@ -184,7 +184,7 @@ namespace Cassette
         public bool Contains(byte[] hash, string encodingName = null)
         {
             if (hash == null)
-                throw new ArgumentNullException("hash");
+                throw new ArgumentNullException(nameof(hash));
 
             return File.Exists(GetContentPath(hash, encodingName));
         }
@@ -192,7 +192,7 @@ namespace Cassette
         public bool TryRead(byte[] hash, out Stream stream, ReadOptions options = ReadOptions.None, string encodingName = null)
         {
             if (hash == null)
-                throw new ArgumentNullException("hash");
+                throw new ArgumentNullException(nameof(hash));
 
             var contentPath = GetContentPath(hash, encodingName);
 
@@ -212,7 +212,7 @@ namespace Cassette
         public bool TryGetContentLength(byte[] hash, out long length, string encodingName = null)
         {
             if (hash == null)
-                throw new ArgumentNullException("hash");
+                throw new ArgumentNullException(nameof(hash));
 
             var contentPath = GetContentPath(hash, encodingName);
 
