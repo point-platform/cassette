@@ -27,5 +27,27 @@ namespace Cassette.Tests
 
             Assert.Equal(hashString, Hash.Format(Hash.Parse(hashString)));
         }
+
+        [Fact]
+        public void Constants()
+        {
+            Assert.Equal(20, Hash.ByteCount);
+            Assert.Equal(40, Hash.StringLength);
+        }
+
+        [Fact]
+        public void IsValid()
+        {
+            Assert.True(Hash.IsValid("40613A45BC715AE4A34895CBDD6122E982FE3DF5"));
+            Assert.True(Hash.IsValid("0000000000000000000000000000000000000000"));
+            Assert.True(Hash.IsValid("ABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCD"));
+            Assert.True(Hash.IsValid("abcdefabcdefabcdefabcdefabcdefabcdefabcd"));
+
+            Assert.False(Hash.IsValid("0000000000000000000000000000000000000000  "));
+            Assert.False(Hash.IsValid("   0000000000000000000000000000000000000000"));
+            Assert.False(Hash.IsValid("0000000000000000000000000000000000000000111"));
+            Assert.False(Hash.IsValid("0000000000000000000000000000000000000"));
+            Assert.False(Hash.IsValid("xyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzx"));
+        }
     }
 }

@@ -39,7 +39,7 @@ namespace Cassette
         /// </summary>
         public const int ByteCount = 20;
 
-        private static readonly Regex _hashRegex = new Regex("[0-9a-fA-F]{" + StringLength + "}", RegexOptions.Compiled);
+        private static readonly Regex _hashRegex = new Regex("^[0-9a-fA-F]{" + StringLength + "}$", RegexOptions.Compiled);
 
         private static readonly SHA1 _hashFunction = SHA1.Create();
 
