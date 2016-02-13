@@ -79,7 +79,7 @@ namespace Cassette
             var tempFile = Path.GetTempFileName();
 
             // Create a SHA-1 hash builder
-            using (var hashBuilder = new SHA1CryptoServiceProvider())
+            using (var hashBuilder = IncrementalHash.CreateHash(HashAlgorithmName.SHA1))
             {
                 // Open the temp file for write
                 using (var fileStream = new FileStream(tempFile,
@@ -112,18 +112,15 @@ namespace Cassette
                             break;
 
                         // Integrate the source data chunk into the hash
-                        hashBuilder.TransformBlock(buffers[bufferIndex], 0, readCount, null, 0);
+                        hashBuilder.AppendData(buffers[bufferIndex], 0, readCount);
 
                         // Write the source data chunk to the output file
                         writeTask = fileStream.WriteAsync(buffers[bufferIndex], 0, readCount, cancellationToken);
                     }
-
-                    // Finalise the hash computation
-                    hashBuilder.TransformFinalBlock(buffers[bufferIndex], 0, 0);
                 }
 
                 // Retrieve the computed hash
-                var hash = hashBuilder.Hash;
+                var hash = hashBuilder.GetHashAndReset();
 
                 // Determine the location for the content file
                 string subPath;
@@ -299,4 +296,46 @@ namespace Cassette
 
         #endregion
     }
+
+#if DNX451 || NET45
+
+    internal enum HashAlgorithmName
+    {
+        SHA1
+    }
+
+    internal sealed class IncrementalHash : IDisposable
+    {
+        private readonly SHA1 _hash;
+
+        public static IncrementalHash CreateHash(HashAlgorithmName algo)
+        {
+            if (algo != HashAlgorithmName.SHA1)
+                throw new ArgumentException("Unsupported hash algorithm.");
+            return new IncrementalHash();
+        }
+
+        private IncrementalHash()
+        {
+            _hash = new SHA1CryptoServiceProvider();
+        }
+
+        public void AppendData(byte[] data, int offset, int count)
+        {
+            _hash.TransformBlock(data, offset, count, null, 0);
+        }
+
+        public byte[] GetHashAndReset()
+        {
+            _hash.TransformFinalBlock(new byte[0], 0, 0);
+            return _hash.Hash;
+        }
+
+        public void Dispose()
+        {
+            _hash.Dispose();
+        }
+    }
+
+#endif
 }
