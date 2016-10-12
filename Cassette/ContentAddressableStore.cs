@@ -42,6 +42,8 @@ namespace Cassette
         /// <summary>The number of characters from the hash to use for the name of the top level subdirectories.</summary>
         private const int HashPrefixLength = 4;
 
+        private static readonly ReaderWriterLockSlim _fileSystemLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+
         /// <summary>
         /// Initialises the store to use <paramref name="contentPath"/> as the root for all content.
         /// </summary>
@@ -127,24 +129,43 @@ namespace Cassette
                 string contentPath;
                 GetPaths(hash, null, out subPath, out contentPath);
 
-                // Test whether a file already exists for this hash
-                if (File.Exists(contentPath))
+                // We might need to lock some file system operations
+                _fileSystemLock.EnterUpgradeableReadLock();
+                try
                 {
-                    // This content already exists in the store
-                    // Delete the temporary file
-                    File.Delete(tempFile);
+                    // Test whether a file already exists for this hash
+                    if (File.Exists(contentPath))
+                    {
+                        // This content already exists in the store
+                        // Delete the temporary file
+                        // NOTE a write lock is not needed here
+                        File.Delete(tempFile);
+                    }
+                    else
+                    {
+                        // We're about to start changing the file system, so take a write lock
+                        _fileSystemLock.EnterWriteLock();
+                        try
+                        {
+                            // Ensure the sub-path exists
+                            if (!Directory.Exists(subPath))
+                                Directory.CreateDirectory(subPath);
+
+                            // Move the temporary file into its correct location
+                            File.Move(tempFile, contentPath);
+
+                            // Set the read-only flag on the file
+                            File.SetAttributes(contentPath, FileAttributes.ReadOnly);
+                        }
+                        finally
+                        {
+                            _fileSystemLock.ExitWriteLock();
+                        }
+                    }
                 }
-                else
+                finally
                 {
-                    // Ensure the sub-path exists
-                    if (!Directory.Exists(subPath))
-                        Directory.CreateDirectory(subPath);
-
-                    // Move the temporary file into its correct location
-                    File.Move(tempFile, contentPath);
-
-                    // Set the read-only flag on the file
-                    File.SetAttributes(contentPath, FileAttributes.ReadOnly);
+                    _fileSystemLock.ExitUpgradeableReadLock();
                 }
 
                 // Write any encoded forms of the content too
