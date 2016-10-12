@@ -4,15 +4,22 @@
   "name": "DrewNoakes.Cassette",
   "title": "Cassette - Content-addressable storage",
   "description": "Content-addressable storage for .NET",
-  "summary": "A library for storing content and retrieving content. When content is written, its SHA1 hash is returned, and this hash may be used to retrieve the content later. Storage of this fashion can dramatically reduce the file system usage when content is likely to repeat. It also allows validation that content has not been corrupted at any point.",
   "authors": [ "Drew Noakes" ],
-  "owners": [ "Drew Noakes" ],
   "copyright": "Drew Noakes 2015-2016",
-  "tags": [ "ContentAddressableStorage", "Storage", "Database", "CAS", "FileSystem" ],
-  "iconUrl": "https://raw.githubusercontent.com/drewnoakes/cassette/master/Cassette.png",
-  "projectUrl": "https://github.com/drewnoakes/cassette",
-  "requireLicenseAcceptance": false,
-  "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0.html",
+
+  "packOptions": {
+    "summary": "A library for storing content and retrieving content. When content is written, its SHA1 hash is returned, and this hash may be used to retrieve the content later. Storage of this fashion can dramatically reduce the file system usage when content is likely to repeat. It also allows validation that content has not been corrupted at any point.",
+    "owners": [ "Drew Noakes" ],
+    "tags": [ "ContentAddressableStorage", "Storage", "Database", "CAS", "FileSystem" ],
+    "iconUrl": "https://raw.githubusercontent.com/drewnoakes/cassette/master/Cassette.png",
+    "projectUrl": "https://github.com/drewnoakes/cassette",
+    "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0.html",
+    "requireLicenseAcceptance": false,
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/drewnoakes/cassette.git"
+    }
+  },
 
   "frameworks": {
     "dnx451": {
