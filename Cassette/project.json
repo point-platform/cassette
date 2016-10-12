@@ -21,28 +21,23 @@
     }
   },
 
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "System.Collections": "4.0.11",
+    "System.IO": "4.1.0",
+    "System.IO.Compression": "4.1.0",
+    "System.IO.FileSystem": "4.0.1",
+    "System.Linq": "4.1.0",
+    "System.Runtime": "4.1.0",
+    "System.Text.RegularExpressions": "4.1.0",
+    "System.Threading": "4.0.11",
+    "System.Security.Cryptography.Algorithms": "4.2.0",
+    "System.Diagnostics.Contracts": "4.0.1"
+  },
+
   "frameworks": {
-    "dnx451": {
-      "dependencies": {
-      },
-      "frameworkAssemblies": {
-        "System.Runtime": ""
-      }
-    },
-    "dnxcore50": {
-      "dependencies": {
-        "Microsoft.CSharp": "4.0.1-beta-23516",
-        "System.Collections": "4.0.11-beta-23516",
-        "System.Linq": "4.0.1-beta-23516",
-        "System.Runtime": "4.0.21-beta-23516",
-        "System.Threading": "4.0.11-beta-23516",
-        "System.Security.Cryptography.Algorithms": "4.0.0-beta-23409",
-        "System.Diagnostics.Contracts": "4.0.1-beta-23516",
-        "System.IO": "4.0.11-beta-23516",
-        "System.IO.Compression": "4.0.0",
-        "System.IO.FileSystem": "4.0.1-beta-23516",
-        "System.Text.RegularExpressions": "4.0.11-beta-23516"
-      }
+    "netstandard1.6": {
+      "imports": "dnxcore50"
     }
   }
 }
