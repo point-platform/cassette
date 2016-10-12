@@ -17,7 +17,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Xunit;
 
 namespace Cassette.Tests
@@ -81,6 +80,8 @@ namespace Cassette.Tests
 
             var expectedHash = TestUtil.CalculateHash(stream);
 
+            stream.Position = 0;
+
             Assert.Equal(expectedHash, await _store.WriteAsync(stream));
         }
 
@@ -103,11 +104,10 @@ namespace Cassette.Tests
         {
             var stream = TestUtil.GetRandomData(1024);
 
-            var actualHash = await _store.WriteAsync(stream);
+            var hash = await _store.WriteAsync(stream);
 
-            var actualHashString = Hash.Format(actualHash);
-            var subpath = Path.Combine(_contentPath, actualHashString.Substring(0, 4));
-            var contentPath = Path.Combine(subpath, actualHashString.Substring(4));
+            var subpath = Path.Combine(_contentPath, hash.ToString().Substring(0, 4));
+            var contentPath = Path.Combine(subpath, hash.ToString().Substring(4));
             Assert.True(Directory.Exists(subpath));
             Assert.True(File.Exists(contentPath));
 
@@ -152,9 +152,8 @@ namespace Cassette.Tests
             var stream = TestUtil.GetRandomData(4096, keepBits: 4);
             var hash = await _store.WriteAsync(stream, encodings: new[] { new GZipContentEncoding() });
 
-            var actualHashString = Hash.Format(hash);
-            var subpath = Path.Combine(_contentPath, actualHashString.Substring(0, 4));
-            var contentPath = Path.Combine(subpath, actualHashString.Substring(4));
+            var subpath = Path.Combine(_contentPath, hash.ToString().Substring(0, 4));
+            var contentPath = Path.Combine(subpath, hash.ToString().Substring(4));
 
             Assert.True(File.Exists(contentPath));
             Assert.True(File.Exists(contentPath + ".gzip"));

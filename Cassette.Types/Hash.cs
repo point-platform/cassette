@@ -1,0 +1,243 @@
+﻿/*
+ * Copyright 2015-2016 Drew Noakes
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+using System;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+
+namespace Cassette
+{
+    public struct Hash : IEquatable<Hash>
+    {
+        /// <summary>
+        /// The length of a hash in string form used by <see cref="Format"/> and <see cref="Parse"/>.
+        /// </summary>
+        public const int StringLength = 40;
+
+        /// <summary>
+        /// The length of a hash in byte array form.
+        /// </summary>
+        public const int ByteCount = 20;
+
+        private readonly byte[] _bytes;
+
+        private Hash(byte[] bytes)
+        {
+            // NOTE we don't validate here as we require all callers to have done so already
+            _bytes = bytes;
+        }
+
+        /// <summary>
+        /// Gets the 40 character hexadecimal string representation of this hash.
+        /// </summary>
+        /// <example>
+        /// 40613A45BC715AE4A34895CBDD6122E982FE3DF5
+        /// </example>
+        public override string ToString()
+        {
+            if (_bytes == null)
+                return "0000000000000000000000000000000000000000";
+
+            var s = new StringBuilder();
+            foreach (var b in _bytes)
+                s.Append(b.ToString("X2"));
+            return s.ToString();
+        }
+
+        #region Static helpers
+
+        private static readonly Regex _hashRegex = new Regex("^[0-9a-fA-F]{" + StringLength + "}$", RegexOptions.Compiled);
+
+        /// <summary>
+        /// Convert <paramref name="hash"/> into a 40 character hexadecimal string.
+        /// </summary>
+        /// <remarks>
+        /// An example of this string is <c>40613A45BC715AE4A34895CBDD6122E982FE3DF5</c>.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <c>null</c>.</exception>
+        public static string Format(byte[] hash)
+        {
+            if (hash == null)
+                throw new ArgumentNullException(nameof(hash));
+            if (hash.Length != ByteCount)
+                throw new ArgumentException("Incorrect number of bytes", nameof(hash));
+
+            var s = new StringBuilder();
+            foreach (var b in hash)
+                s.Append(b.ToString("X2"));
+            return s.ToString();
+        }
+
+        /// <summary>
+        /// Parse the hexadecimal string <paramref name="hex"/> into a <see cref="Hash"/>.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="hex"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="hex"/> has incorrect length.</exception>
+        /// <exception cref="FormatException"><paramref name="hex"/> has invalid format.</exception>
+        public static Hash Parse(string hex) => new Hash(ParseToBytes(hex));
+
+        /// <summary>
+        /// Creates a <see cref="Hash"/> from a byte array.
+        /// </summary>
+        /// <exception cref="ArgumentException"><paramref name="bytes"/> is an invalid hash.</exception>
+        public static Hash FromBytes(byte[] bytes)
+        {
+            if (!IsValid(bytes))
+                throw new ArgumentException("Invalid byte array.", nameof(bytes));
+
+            return new Hash(bytes);
+        }
+
+        /// <summary>
+        /// Parse the hexadecimal string <paramref name="hex"/> into a 20 element byte array.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"><paramref name="hex"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="hex"/> has incorrect length.</exception>
+        /// <exception cref="FormatException"><paramref name="hex"/> has invalid format.</exception>
+        private static byte[] ParseToBytes(string hex)
+        {
+            if (hex == null)
+                throw new ArgumentNullException(nameof(hex));
+
+            if (hex.Length != StringLength)
+                throw new ArgumentException("Incorrect number of characters", nameof(hex));
+
+            // TODO do this with only a single allocation (currently there are at least 23 wasted allocations)
+            return Enumerable.Range(0, hex.Length)
+                .Where(x => x%2 == 0)
+                .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                .ToArray();
+        }
+
+        /// <summary>
+        /// Attempt to parse the hexadecimal string <paramref name="hex"/> into a <see cref="Hash"/>.
+        /// </summary>
+        /// <returns><c>true</c> if the parse was successful, otherwise <c>false</c>.</returns>
+        public static bool TryParse(string hex, out Hash hash)
+        {
+            byte[] bytes;
+            if (!TryParse(hex, out bytes))
+            {
+                hash = default(Hash);
+                return false;
+            }
+
+            hash = new Hash(bytes);
+            return true;
+        }
+
+        /// <summary>
+        /// Attempt to parse the hexadecimal string <paramref name="hex"/> into a 20 element byte array.
+        /// </summary>
+        /// <returns><c>true</c> if the parse was successful, otherwise <c>false</c>.</returns>
+        public static bool TryParse(string hex, out byte[] hash)
+        {
+            if (hex == null || hex.Length != StringLength)
+            {
+                hash = null;
+                return false;
+            }
+
+            try
+            {
+                hash = ParseToBytes(hex);
+                return true;
+            }
+            catch
+            {
+                hash = null;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Get a value indicating whether <paramref name="hash"/> is a valid hexadecimal hash string.
+        /// </summary>
+        /// <remarks>
+        /// This method verifies that <paramref name="hash"/> is not <c>null</c> and has the correct length.
+        /// <para />
+        /// Note that you never have to test validity of a <see cref="Hash"/> instance, as they are always
+        /// in a valid state.
+        /// </remarks>
+        public static bool IsValid(string hash)
+        {
+            return hash != null && _hashRegex.IsMatch(hash);
+        }
+
+        /// <summary>
+        /// Get a value indicating whether <paramref name="hash"/> is a valid hash array.
+        /// </summary>
+        /// <remarks>
+        /// This method verifies <paramref name="hash"/> is not <c>null</c> and has the correct length.
+        /// <para />
+        /// Note that you never have to test validity of a <see cref="Hash"/> instance, as they are always
+        /// in a valid state.
+        /// </remarks>
+        public static bool IsValid(byte[] hash)
+        {
+            return hash != null && hash.Length == ByteCount;
+        }
+
+        #endregion
+
+        #region Equality and hashing
+
+        public bool Equals(Hash other)
+        {
+            if (_bytes == null)
+                return other._bytes == null;
+            if (other._bytes == null)
+                return _bytes == null;
+
+            for (var i = 0; i < ByteCount; i++)
+            {
+                if (_bytes[i] != other._bytes[i])
+                    return false;
+            }
+
+            return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+                return false;
+            return obj is Hash && Equals((Hash)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            if (_bytes == null)
+                return 0;
+
+            unchecked
+            {
+                var result = 0;
+                // ReSharper disable once ForCanBeConvertedToForeach
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                for (var i = 0; i < _bytes.Length; i++)
+                    result = (result*31) ^ _bytes[i];
+                return result;
+            }
+        }
+
+        public static bool operator ==(Hash left, Hash right) => left.Equals(right);
+        public static bool operator !=(Hash left, Hash right) => !left.Equals(right);
+
+        #endregion
+    }
+}

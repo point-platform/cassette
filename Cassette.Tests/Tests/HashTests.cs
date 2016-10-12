@@ -21,11 +21,11 @@ namespace Cassette.Tests
     public sealed class HashTests
     {
         [Fact]
-        public void RoundTrip()
+        public void RoundTripString()
         {
             const string hashString = "40613A45BC715AE4A34895CBDD6122E982FE3DF5";
 
-            Assert.Equal(hashString, Hash.Format(Hash.Parse(hashString)));
+            Assert.Equal(hashString, Hash.Parse(hashString).ToString());
         }
 
         [Fact]
@@ -48,6 +48,14 @@ namespace Cassette.Tests
             Assert.False(Hash.IsValid("0000000000000000000000000000000000000000111"));
             Assert.False(Hash.IsValid("0000000000000000000000000000000000000"));
             Assert.False(Hash.IsValid("xyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzx"));
+            Assert.False(Hash.IsValid((string)null));
+
+            Assert.True(Hash.IsValid(new byte[Hash.ByteCount]));
+
+            Assert.False(Hash.IsValid(new byte[Hash.ByteCount - 1]));
+            Assert.False(Hash.IsValid(new byte[Hash.ByteCount + 1]));
+            Assert.False(Hash.IsValid(new byte[0]));
+            Assert.False(Hash.IsValid((byte[])null));
         }
     }
 }

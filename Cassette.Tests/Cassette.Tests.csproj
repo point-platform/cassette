@@ -45,6 +45,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Cassette.Types\Hash.cs">
+      <Link>Source\Hash.cs</Link>
+    </Compile>
+    <Compile Include="..\Cassette.Types\HashEqualityComparer.cs">
+      <Link>Source\HashEqualityComparer.cs</Link>
+    </Compile>
     <Compile Include="..\Cassette\ContentAddressableStore.cs">
       <Link>Source\ContentAddressableStore.cs</Link>
     </Compile>
@@ -54,11 +60,8 @@
     <Compile Include="..\Cassette\GZipContentEncoding.cs">
       <Link>Source\GZipContentEncoding.cs</Link>
     </Compile>
-    <Compile Include="..\Cassette\Hash.cs">
-      <Link>Source\Hash.cs</Link>
-    </Compile>
-    <Compile Include="..\Cassette\HashEqualityComparer.cs">
-      <Link>Source\HashEqualityComparer.cs</Link>
+    <Compile Include="..\Cassette\HashCalculator.cs">
+      <Link>Source\HashCalculator.cs</Link>
     </Compile>
     <Compile Include="..\Cassette\IContentAddressableStore.cs">
       <Link>Source\IContentAddressableStore.cs</Link>

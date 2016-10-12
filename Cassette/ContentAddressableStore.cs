@@ -70,7 +70,8 @@ namespace Cassette
                 Directory.CreateDirectory(_contentPath);
         }
 
-        public async Task<byte[]> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken(), IEnumerable<IContentEncoding> encodings = null)
+        /// <inheritdoc />
+        public async Task<Hash> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken(), IEnumerable<IContentEncoding> encodings = null)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
@@ -122,7 +123,7 @@ namespace Cassette
                 }
 
                 // Retrieve the computed hash
-                var hash = hashBuilder.GetHashAndReset();
+                var hash = Hash.FromBytes(hashBuilder.GetHashAndReset());
 
                 // Determine the location for the content file
                 string subPath;
@@ -206,7 +207,8 @@ namespace Cassette
             }
         }
 
-        public bool Contains(byte[] hash, string encodingName = null)
+        /// <inheritdoc />
+        public bool Contains(Hash hash, string encodingName = null)
         {
             if (hash == null)
                 throw new ArgumentNullException(nameof(hash));
@@ -214,7 +216,8 @@ namespace Cassette
             return File.Exists(GetContentPath(hash, encodingName));
         }
 
-        public bool TryRead(byte[] hash, out Stream stream, ReadOptions options = ReadOptions.None, string encodingName = null)
+        /// <inheritdoc />
+        public bool TryRead(Hash hash, out Stream stream, ReadOptions options = ReadOptions.None, string encodingName = null)
         {
             if (hash == null)
                 throw new ArgumentNullException(nameof(hash));
@@ -234,7 +237,8 @@ namespace Cassette
             return true;
         }
 
-        public bool TryGetContentLength(byte[] hash, out long length, string encodingName = null)
+        /// <inheritdoc />
+        public bool TryGetContentLength(Hash hash, out long length, string encodingName = null)
         {
             if (hash == null)
                 throw new ArgumentNullException(nameof(hash));
@@ -251,7 +255,8 @@ namespace Cassette
             return true;
         }
 
-        public IEnumerable<byte[]> GetHashes()
+        /// <inheritdoc />
+        public IEnumerable<Hash> GetHashes()
         {
             var topLevelRegex = new Regex("^[0-9a-f]{" + HashPrefixLength + "}$", RegexOptions.IgnoreCase);
             var subLevelRegex = new Regex("^[0-9a-f]{" + (Hash.StringLength - HashPrefixLength) + "}$", RegexOptions.IgnoreCase);
@@ -265,9 +270,10 @@ namespace Cassette
                    select Hash.Parse(directory + file);
         }
 
-        public bool Delete(byte[] hash)
+        /// <inheritdoc />
+        public bool Delete(Hash hash)
         {
-            var hashString = Hash.Format(hash);
+            var hashString = hash.ToString();
             var subPath = GetSubPath(hashString);
 
             var files = Directory.GetFiles(subPath, hashString.Substring(HashPrefixLength) + ".*", SearchOption.TopDirectoryOnly);
@@ -290,18 +296,18 @@ namespace Cassette
 
         #region Computing paths
 
-        private void GetPaths(byte[] hashBytes, string encodingName, out string subPath, out string contentPath)
+        private void GetPaths(Hash hash, string encodingName, out string subPath, out string contentPath)
         {
-            var hashString = Hash.Format(hashBytes);
+            var hashString = hash.ToString();
             subPath = GetSubPath(hashString);
             contentPath = Path.Combine(subPath, hashString.Substring(HashPrefixLength));
             if (encodingName != null)
                 contentPath += "." + encodingName;
         }
 
-        private string GetContentPath(byte[] hash, string encodingName = null)
+        private string GetContentPath(Hash hash, string encodingName = null)
         {
-            var hashString = Hash.Format(hash);
+            var hashString = hash.ToString();
             var subPath = GetSubPath(hashString);
             var contentPath = Path.Combine(subPath, hashString.Substring(HashPrefixLength));
             return encodingName != null
@@ -309,11 +315,7 @@ namespace Cassette
                 : contentPath;
         }
 
-        private string GetSubPath(string hashString)
-        {
-            var subPath = Path.Combine(_contentPath, hashString.Substring(0, HashPrefixLength));
-            return subPath;
-        }
+        private string GetSubPath(string hashString) => Path.Combine(_contentPath, hashString.Substring(0, HashPrefixLength));
 
         #endregion
     }

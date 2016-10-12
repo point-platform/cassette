@@ -19,9 +19,9 @@ using System.Collections.Generic;
 namespace Cassette
 {
     /// <summary>
-    /// Implementation of <see cref="IEqualityComparer{T}"/> for hash values.
+    /// Implementation of <see cref="IEqualityComparer{T}"/> for hash byte arrays.
     /// </summary>
-    public sealed class HashEqualityComparer : IEqualityComparer<byte[]>
+    public sealed class HashBytesEqualityComparer : IEqualityComparer<byte[]>
     {
         public bool Equals(byte[] x, byte[] y)
         {

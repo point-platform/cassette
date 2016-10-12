@@ -57,13 +57,11 @@ namespace Cassette.Tests
             return stream;
         }
 
-        public static byte[] CalculateHash(MemoryStream stream)
+        public static Hash CalculateHash(MemoryStream stream)
         {
-            byte[] expectedHash;
+            // NOTE we need a new instance for each calculation as it's not threadsafe
             using (var hash = new SHA1CryptoServiceProvider())
-                expectedHash = hash.ComputeHash(stream);
-            stream.Position = 0;
-            return expectedHash;
+                return Hash.FromBytes(hash.ComputeHash(stream));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "id": "DrewNoakes.Cassette",
   "name": "DrewNoakes.Cassette",
@@ -36,7 +36,8 @@
     "System.Text.RegularExpressions": "4.1.0",
     "System.Threading": "4.0.11",
     "System.Security.Cryptography.Algorithms": "4.2.0",
-    "System.Diagnostics.Contracts": "4.0.1"
+    "System.Diagnostics.Contracts": "4.0.1",
+    "Cassette.Types": "1.0.0-*"
   },
 
   "frameworks": {

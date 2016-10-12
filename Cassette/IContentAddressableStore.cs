@@ -37,7 +37,7 @@ namespace Cassette
         /// When one or more encodings are provided, the store will compute and persist encoded
         /// versions of the content as well.
         /// <para />
-        /// If the store alreadys contains the content, but not in a specified encoding, then
+        /// If the store already contains the content, but not in a specified encoding, then
         /// a correspondingly encoded version will be created and persisted.
         /// </remarks>
         /// <param name="stream">A stream from which the data to be written can be read.</param>
@@ -45,7 +45,7 @@ namespace Cassette
         /// <param name="encodings">A sequence of encodings to also store this content with. If <c>null</c> or empty, no additional encodings are used.</param>
         /// <returns>An async task, the result of which is the written content's hash.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
-        Task<byte[]> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken(), IEnumerable<IContentEncoding> encodings = null);
+        Task<Hash> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken(), IEnumerable<IContentEncoding> encodings = null);
 
         /// <summary>
         /// Gets a value indicating whether content exists in the store with the specified <paramref name="hash"/>.
@@ -54,7 +54,7 @@ namespace Cassette
         /// <param name="encodingName">Conditions the check on whether the content exists with the specified encoding. If <c>null</c>, the check indicates whether the unencoded content exists in the store.</param>
         /// <returns><c>true</c> if the content exists in the store, otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <c>null</c>.</exception>
-        bool Contains(byte[] hash, string encodingName = null);
+        bool Contains(Hash hash, string encodingName = null);
 
         /// <summary>
         /// Read content from the store.
@@ -73,7 +73,7 @@ namespace Cassette
         /// <param name="encodingName">The encoding used when storing the content, or <c>null</c> to access the unencoded content.</param>
         /// <returns><c>true</c> if the content was found, otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <c>null</c>.</exception>
-        bool TryRead(byte[] hash, out Stream stream, ReadOptions options = ReadOptions.None, string encodingName = null);
+        bool TryRead(Hash hash, out Stream stream, ReadOptions options = ReadOptions.None, string encodingName = null);
 
         /// <summary>
         /// Get the length of stored content.
@@ -83,7 +83,7 @@ namespace Cassette
         /// <param name="encodingName">The encoding used when storing the content, or <c>null</c> to access the unencoded content.</param>
         /// <returns><c>true</c> if the requested content exists, otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <c>null</c>.</exception>
-        bool TryGetContentLength(byte[] hash, out long length, string encodingName = null);
+        bool TryGetContentLength(Hash hash, out long length, string encodingName = null);
 
         /// <summary>
         /// Get an enumeration over all hashes contained within the store.
@@ -93,7 +93,7 @@ namespace Cassette
         /// not behave deterministically if modified while enumerating.
         /// </remarks>
         /// <returns>An enumeration over all hashes contained within the store.</returns>
-        IEnumerable<byte[]> GetHashes();
+        IEnumerable<Hash> GetHashes();
 
         /// <summary>
         /// Attempt to delete an item of content.
@@ -104,6 +104,6 @@ namespace Cassette
         /// <param name="hash">The hash of the content to delete.</param>
         /// <returns><c>true</c> if the content existed and was deleted, otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <c>null</c>.</exception>
-        bool Delete(byte[] hash);
+        bool Delete(Hash hash);
     }
 }
