@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.0.0-rc4",
+  "version": "1.0.0-*",
   "id": "DrewNoakes.Cassette",
   "name": "DrewNoakes.Cassette",
   "title": "Cassette - Content-addressable storage",
