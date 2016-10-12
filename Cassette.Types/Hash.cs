@@ -17,7 +17,6 @@
 using System;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Cassette
 {
@@ -59,8 +58,6 @@ namespace Cassette
         }
 
         #region Static helpers
-
-        private static readonly Regex _hashRegex = new Regex("^[0-9a-fA-F]{" + StringLength + "}$", RegexOptions.Compiled);
 
         /// <summary>
         /// Convert <paramref name="hash"/> into a 40 character hexadecimal string.
@@ -175,7 +172,24 @@ namespace Cassette
         /// </remarks>
         public static bool IsValid(string hash)
         {
-            return hash != null && _hashRegex.IsMatch(hash);
+            if (hash?.Length != StringLength)
+                return false;
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var i = 0; i < hash.Length; i++)
+            {
+                var c = hash[i];
+                if (c >= '0' && c <= '9')
+                    continue;
+                if (c >= 'a' && c <= 'f')
+                    continue;
+                if (c >= 'A' && c <= 'F')
+                    continue;
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
