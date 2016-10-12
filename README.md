@@ -3,14 +3,14 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/hpn8g6tyj5luidcp?svg=true)](https://ci.appveyor.com/project/drewnoakes/cassette)
 [![Cassette NuGet version](https://img.shields.io/nuget/v/DrewNoakes.Cassette.svg)](https://www.nuget.org/packages/DrewNoakes.Cassette/)
 
-Cassette is a simple and efficient content-addressable storage system for .NET 4.5.
+Cassette is a simple and efficient content-addressable storage system for .NET 4.6 and .NET Core.
 
 ```csharp
 // Create a store, backed by the specified file system location
 var cassette = new ContentAddressableStore(@"c:\cassette-data\");
 
 // Store some content, obtaining its hash (content address)
-byte[] hash = await cassette.WriteAsync(writeStream);
+Hash hash = await cassette.WriteAsync(writeStream);
 
 // Later, use the hash to look up the content
 Stream stream;
@@ -40,19 +40,7 @@ For more information, read [Wikipedia's CAS article](http://en.wikipedia.org/wik
 
 * `IContentAddressableStore` exposes functionality of a cassette store
 * `ContentAddressableStore` is the concrete implementation
-* `Hash` is a static class with useful methods for working with hashes
-
-## Addresses
-
-Content is addressed via its SHA-1 hash. The API accepts and returns hash values as `byte[]` for minimal representation in memory.
-
-The `Hash` class provides convenient utilities for working with hashes:
-
-* `Hash.Format` convert from `byte[]` to `string`
-* `Hash.Parse` and `Hash.TryParse` convert from `string` to `byte[]`
-* `Hash.IsValid` validates hashes
-* `Hash.Compute` computes the hash for some content
-* `Hash.Equals` compares two hashes for equality
+* `Hash` holds the identity of a peice of content
 
 ## Writing content
 
@@ -60,7 +48,7 @@ The `Hash` class provides convenient utilities for working with hashes:
 using (var stream = File.OpenRead(@"c:\content.jpg"))
 {
     var hash = await store.WriteAsync(dataStream);
-    Console.WriteLine("Stored with address: {0}", Hash.Format(hash));
+    Console.WriteLine("Stored with address: {0}", hash);
 }
 ```
 
@@ -80,7 +68,7 @@ Multiple clients may read a file concurrently. Content may not be deleted via `I
 When `TryRead` returns `true`, client code must dispose the returned `Stream`.
 
 ```csharp
-byte[] hash = ...;
+Hash hash = ...;
 Stream stream;
 if (store.TryRead(hash, out stream))
 {
