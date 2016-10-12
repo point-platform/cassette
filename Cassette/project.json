@@ -7,6 +7,10 @@
   "authors": [ "Drew Noakes" ],
   "copyright": "Drew Noakes 2015-2016",
 
+  "buildOptions": {
+    "xmlDoc": true
+  },
+
   "packOptions": {
     "summary": "A library for storing content and retrieving content. When content is written, its SHA1 hash is returned, and this hash may be used to retrieve the content later. Storage of this fashion can dramatically reduce the file system usage when content is likely to repeat. It also allows validation that content has not been corrupted at any point.",
     "owners": [ "Drew Noakes" ],
