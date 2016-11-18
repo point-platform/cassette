@@ -26,22 +26,22 @@
   },
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0",
-    "System.Collections": "4.0.11",
-    "System.IO": "4.1.0",
-    "System.IO.Compression": "4.1.0",
-    "System.IO.FileSystem": "4.0.1",
-    "System.Linq": "4.1.0",
-    "System.Runtime": "4.1.0",
-    "System.Text.RegularExpressions": "4.1.0",
-    "System.Threading": "4.0.11",
-    "System.Security.Cryptography.Algorithms": "4.2.0",
-    "System.Diagnostics.Contracts": "4.0.1",
     "DrewNoakes.Cassette.Types": "1.0.0-*"
   },
 
   "frameworks": {
     "netstandard1.3": {
+      "NETStandard.Library": "1.6.0",
+      "System.Collections": "4.0.11",
+      "System.IO": "4.1.0",
+      "System.IO.Compression": "4.1.0",
+      "System.IO.FileSystem": "4.0.1",
+      "System.Linq": "4.1.0",
+      "System.Runtime": "4.1.0",
+      "System.Text.RegularExpressions": "4.1.0",
+      "System.Threading": "4.0.11",
+      "System.Security.Cryptography.Algorithms": "4.2.0",
+      "System.Diagnostics.Contracts": "4.0.1"
     },
     "net46": {
     }
