@@ -20,6 +20,16 @@ using System.Text;
 
 namespace Cassette
 {
+    /// <summary>
+    /// Models a SHA1 hash.
+    /// </summary>
+    /// <remarks>
+    /// This type holds the hash of content stored by Cassette. Data stored in Cassette
+    /// is addressed by the hash of its content, so this type is used when addressing
+    /// content in a <c>IContentAddressableStore</c>.
+    /// <para />
+    /// Internally, this type holds a single <c>byte[]</c> with 20 elements.
+    /// </remarks>
     public struct Hash : IEquatable<Hash>
     {
         /// <summary>
@@ -210,6 +220,7 @@ namespace Cassette
 
         #region Equality and hashing
 
+        /// <inheritdoc />
         public bool Equals(Hash other)
         {
             if (_bytes == null)
@@ -226,6 +237,7 @@ namespace Cassette
             return true;
         }
 
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -233,6 +245,7 @@ namespace Cassette
             return obj is Hash && Equals((Hash)obj);
         }
 
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             if (_bytes == null)
@@ -249,7 +262,10 @@ namespace Cassette
             }
         }
 
+        /// <inheritdoc />
         public static bool operator ==(Hash left, Hash right) => left.Equals(right);
+
+        /// <inheritdoc />
         public static bool operator !=(Hash left, Hash right) => !left.Equals(right);
 
         #endregion

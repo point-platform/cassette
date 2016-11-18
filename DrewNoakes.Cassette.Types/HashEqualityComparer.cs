@@ -23,6 +23,7 @@ namespace Cassette
     /// </summary>
     public sealed class HashBytesEqualityComparer : IEqualityComparer<byte[]>
     {
+        /// <inheritdoc />
         public bool Equals(byte[] x, byte[] y)
         {
             if (x == null ^ y == null)
@@ -30,6 +31,7 @@ namespace Cassette
             return ReferenceEquals(x, y) || Hash.Equals(x, y);
         }
 
+        /// <inheritdoc />
         public int GetHashCode(byte[] hash)
         {
             // Implementation from http://stackoverflow.com/a/468084/24874
