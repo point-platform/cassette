@@ -5,6 +5,7 @@
   "version": "1.0.0-*",
 
   "buildOptions": {
+    "xmlDoc": true,
     "debugType": "portable"
   },
 
