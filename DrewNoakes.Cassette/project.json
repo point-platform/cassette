@@ -43,7 +43,7 @@
       "System.Security.Cryptography.Algorithms": "4.2.0",
       "System.Diagnostics.Contracts": "4.0.1"
     },
-    "net46": {
+    "net45": {
     }
   }
 }
