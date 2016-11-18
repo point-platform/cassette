@@ -8,7 +8,8 @@
   "copyright": "Drew Noakes 2015-2016",
 
   "buildOptions": {
-    "xmlDoc": true
+    "xmlDoc": true,
+    "debugType": "portable"
   },
 
   "packOptions": {
