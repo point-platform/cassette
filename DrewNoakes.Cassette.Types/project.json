@@ -1,4 +1,7 @@
 ﻿{
+  "title": "Cassette - Content-addressable storage",
+  "copyright": "Drew Noakes 2015-2016",
+  "description": "Content-addressable storage for .NET",
   "version": "1.0.0-*",
 
   "buildOptions": {

@@ -1,4 +1,7 @@
 ﻿{
+  "copyright": "Drew Noakes 2015-2016",
+  "description": "Unit tests for Cassette - Content-addressable storage",
+  "title": "Cassette.Tests",
   "version": "1.0.0-*",
 
   "testRunner": "xunit",
