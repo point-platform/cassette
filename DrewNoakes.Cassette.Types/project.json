@@ -1,12 +1,28 @@
 ﻿{
+  "version": "1.0.0-*",
+  "id": "DrewNoakes.Cassette.Types",
+  "name": "DrewNoakes.Cassette.Types",
   "title": "Cassette - Content-addressable storage",
   "copyright": "Drew Noakes 2015-2016",
   "description": "Content-addressable storage for .NET",
-  "version": "1.0.0-*",
 
   "buildOptions": {
     "xmlDoc": true,
     "debugType": "portable"
+  },
+
+  "packOptions": {
+    "summary": "Cassette is a library for storing and retrieving content. This package contains the Hash type and utility types required by Cassette, but which have lower framework requirements. Users of Cassette may wish to expose these types to their clients, hence this separate package.",
+    "owners": [ "Drew Noakes" ],
+    "tags": [ "ContentAddressableStorage", "Storage", "Database", "CAS", "FileSystem" ],
+    "iconUrl": "https://raw.githubusercontent.com/drewnoakes/cassette/master/Cassette.png",
+    "projectUrl": "https://github.com/drewnoakes/cassette",
+    "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0.html",
+    "requireLicenseAcceptance": false,
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/drewnoakes/cassette.git"
+    }
   },
 
   "dependencies": {},
