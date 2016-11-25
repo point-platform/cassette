@@ -16,7 +16,7 @@
     "summary": "A library for storing and retrieving content. When content is written, its SHA1 hash is returned, and this hash may be used to retrieve the content later. Storage of this fashion can dramatically reduce the file system usage when content is likely to repeat. It also allows validation that content has not been corrupted at any point.",
     "owners": [ "Drew Noakes" ],
     "tags": [ "ContentAddressableStorage", "Storage", "Database", "CAS", "FileSystem" ],
-    "iconUrl": "https://raw.githubusercontent.com/drewnoakes/cassette/master/Cassette.png",
+    "iconUrl": "https://raw.githubusercontent.com/drewnoakes/cassette/master/CassetteSquare.png",
     "projectUrl": "https://github.com/drewnoakes/cassette",
     "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0.html",
     "requireLicenseAcceptance": false,

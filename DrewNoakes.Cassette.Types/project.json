@@ -15,7 +15,7 @@
     "summary": "Cassette is a library for storing and retrieving content. This package contains the Hash type and utility types required by Cassette, but which have lower framework requirements. Users of Cassette may wish to expose these types to their clients, hence this separate package.",
     "owners": [ "Drew Noakes" ],
     "tags": [ "ContentAddressableStorage", "Storage", "Database", "CAS", "FileSystem" ],
-    "iconUrl": "https://raw.githubusercontent.com/drewnoakes/cassette/master/Cassette.png",
+    "iconUrl": "https://raw.githubusercontent.com/drewnoakes/cassette/master/CassetteSquare.png",
     "projectUrl": "https://github.com/drewnoakes/cassette",
     "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0.html",
     "requireLicenseAcceptance": false,
