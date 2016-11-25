@@ -2,9 +2,9 @@
   "version": "1.0.0-*",
   "id": "DrewNoakes.Cassette.Types",
   "name": "DrewNoakes.Cassette.Types",
-  "title": "Cassette - Content-addressable storage",
+  "title": "Cassette.Types - Content-addressable storage",
   "copyright": "Drew Noakes 2015-2016",
-  "description": "Content-addressable storage for .NET",
+  "description": "Types exposed by Cassette, a content-addressable storage library for .NET",
 
   "buildOptions": {
     "xmlDoc": true,
