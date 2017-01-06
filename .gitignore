@@ -17,3 +17,4 @@ TestResult*/
 packages/
 artifacts/
 /.vs/
+/.idea/
