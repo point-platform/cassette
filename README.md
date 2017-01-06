@@ -3,7 +3,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/hpn8g6tyj5luidcp?svg=true)](https://ci.appveyor.com/project/drewnoakes/cassette)
 [![Cassette NuGet version](https://img.shields.io/nuget/v/DrewNoakes.Cassette.svg)](https://www.nuget.org/packages/DrewNoakes.Cassette/)
 
-Cassette is a simple and efficient content-addressable storage system for .NET 4.6 and .NET Core.
+Cassette is a simple and efficient content-addressable storage system for .NET 4.5 and .NET Core (`netstandard1.3`).
 
 ```csharp
 // Create a store, backed by the specified file system location
@@ -87,8 +87,7 @@ The performance of reads can be improved by specifying `ReadOptions` as describe
 * `Asynchronous` indicates `Stream.ReadAsync` will be used.
 
 ```csharp
-TryRead(hash, out stream,
-    ReadOptions.SequentialScan | ReadOptions.ReadAsync)
+store.TryRead(hash, out stream, ReadOptions.SequentialScan | ReadOptions.ReadAsync)
 ```
 
 ## Asynchronous IO
@@ -119,7 +118,7 @@ The complete set of hashes is returned via `GetHashes`. This method computes the
 
 ## Encoding
 
-Version 0.3 adds support for encoding stored content. The primary use case for this is to store pre-compressed data whereby the cost of compressing content is taken upfront once at write time, rather than for each read.
+Cassette supports optionally storing content using an encoding. The primary use case for this is to store pre-compressed data whereby the cost of compressing content is taken upfront once at write time, rather than for each read.
 
 Content may be stored in multiple encodings. For example, an HTTP server may support both no encoding, or GZIP content/transfer encoding. Such an HTTP handler could request either encoding from the store depending upon request headers.
 
