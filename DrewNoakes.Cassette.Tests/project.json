@@ -1,5 +1,5 @@
 ﻿{
-  "copyright": "Drew Noakes 2015-2016",
+  "copyright": "Drew Noakes 2015-2017",
   "description": "Unit tests for Cassette - Content-addressable storage",
   "title": "Cassette.Tests",
   "version": "1.0.0-*",

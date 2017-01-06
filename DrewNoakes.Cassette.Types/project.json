@@ -3,7 +3,7 @@
   "id": "DrewNoakes.Cassette.Types",
   "name": "DrewNoakes.Cassette.Types",
   "title": "Cassette.Types - Content-addressable storage",
-  "copyright": "Drew Noakes 2015-2016",
+  "copyright": "Drew Noakes 2015-2017",
   "description": "Types exposed by Cassette, a content-addressable storage library for .NET",
 
   "buildOptions": {
