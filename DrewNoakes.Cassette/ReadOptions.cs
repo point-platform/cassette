@@ -32,13 +32,13 @@ namespace Cassette
 
         /// <summary>
         /// Indicates that data will be read sequentially from beginning to end. The system may
-        /// use this information to optimise cachine.
+        /// use this information to optimise caching.
         /// </summary>
         SequentialScan = FileOptions.SequentialScan,
 
         /// <summary>
         /// Indicates that data contents will be accessed randomly. The system may use this
-        /// information to optimise cachine.
+        /// information to optimise caching.
         /// </summary>
         RandomAccess = FileOptions.RandomAccess,
 
