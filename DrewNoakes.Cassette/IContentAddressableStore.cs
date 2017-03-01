@@ -60,7 +60,7 @@ namespace Cassette
         /// Read content from the store.
         /// </summary>
         /// <remarks>
-        /// When <c>true</c> is returned, <paramref name="stream"/> will be non-null and
+        /// When <c>true</c> is returned, <paramref name="stream"/> will be non-<c>null</c> and
         /// must be disposed when finished with.
         /// <para />
         /// If <paramref name="encodingName"/> is non-<c>null</c> and the content was not written

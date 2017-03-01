@@ -14,7 +14,7 @@ Hash hash = await cassette.WriteAsync(writeStream);
 
 // Later, use the hash to look up the content
 Stream stream;
-if (cassette.TryRead(hash, out stream, ReadOptions.Asychronous | ReadOptions.SequentialScan))
+if (cassette.TryRead(hash, out stream, ReadOptions.Asynchronous | ReadOptions.SequentialScan))
 {
     using (stream)
     {
