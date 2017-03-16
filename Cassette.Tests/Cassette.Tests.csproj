@@ -5,15 +5,11 @@
     <Copyright>Drew Noakes 2015-2017</Copyright>
     <AssemblyTitle>Cassette.Tests</AssemblyTitle>
     <TargetFramework>net46</TargetFramework>
-    <AssemblyName>DrewNoakes.Cassette.Tests</AssemblyName>
+    <AssemblyName>Cassette.Tests</AssemblyName>
     <PackageId>DrewNoakes.Cassette.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RootNamespace>Cassette.Tests</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\DrewNoakes.Cassette\DrewNoakes.Cassette.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
@@ -24,6 +20,10 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cassette\Cassette.csproj" />
   </ItemGroup>
 
 </Project>
