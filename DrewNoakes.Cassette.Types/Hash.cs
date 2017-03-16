@@ -210,10 +210,7 @@ namespace Cassette
         /// Note that you never have to test validity of a <see cref="Hash"/> instance, as they are always
         /// in a valid state.
         /// </remarks>
-        public static bool IsValid(byte[] hash)
-        {
-            return hash != null && hash.Length == ByteCount;
-        }
+        public static bool IsValid(byte[] hash) => hash != null && hash.Length == ByteCount;
 
         #endregion
 
