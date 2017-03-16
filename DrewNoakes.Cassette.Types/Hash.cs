@@ -241,7 +241,7 @@ namespace Cassette
         {
             if (ReferenceEquals(null, obj))
                 return false;
-            return obj is Hash && Equals((Hash)obj);
+            return obj is Hash hash && Equals(hash);
         }
 
         /// <inheritdoc />
