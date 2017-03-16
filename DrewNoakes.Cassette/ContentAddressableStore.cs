@@ -126,9 +126,7 @@ namespace Cassette
                 var hash = Hash.FromBytes(hashBuilder.GetHashAndReset());
 
                 // Determine the location for the content file
-                string subPath;
-                string contentPath;
-                GetPaths(hash, null, out subPath, out contentPath);
+                GetPaths(hash, null, out string subPath, out string contentPath);
 
                 // We might need to lock some file system operations
                 _fileSystemLock.EnterUpgradeableReadLock();

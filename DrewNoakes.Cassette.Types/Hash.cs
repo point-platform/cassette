@@ -136,8 +136,7 @@ namespace Cassette
         /// <returns><c>true</c> if the parse was successful, otherwise <c>false</c>.</returns>
         public static bool TryParse(string hex, out Hash hash)
         {
-            byte[] bytes;
-            if (!TryParse(hex, out bytes))
+            if (!TryParse(hex, out byte[] bytes))
             {
                 hash = default(Hash);
                 return false;
