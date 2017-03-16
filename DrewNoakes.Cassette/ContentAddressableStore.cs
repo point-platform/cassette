@@ -61,10 +61,7 @@ namespace Cassette
         /// <PermissionSet><IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/></PermissionSet>
         public ContentAddressableStore(string contentPath)
         {
-            if (contentPath == null)
-                throw new ArgumentNullException(nameof(contentPath));
-
-            _contentPath = contentPath;
+            _contentPath = contentPath ?? throw new ArgumentNullException(nameof(contentPath));
 
             if (!Directory.Exists(_contentPath))
                 Directory.CreateDirectory(_contentPath);
