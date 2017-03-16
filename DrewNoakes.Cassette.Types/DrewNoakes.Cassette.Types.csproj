@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Types exposed by Cassette, a content-addressable storage library for .NET</Description>
+    <Copyright>Drew Noakes 2015-2017</Copyright>
+    <AssemblyTitle>Cassette.Types - Content-addressable storage</AssemblyTitle>
+    <TargetFrameworks>netstandard1.0;net35</TargetFrameworks>
+    <DebugType>portable</DebugType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
+    <AssemblyName>DrewNoakes.Cassette.Types</AssemblyName>
+    <PackageId>DrewNoakes.Cassette.Types</PackageId>
+    <PackageTags>ContentAddressableStorage;Storage;Database;CAS;FileSystem</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/drewnoakes/cassette/master/CassetteSquare.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/drewnoakes/cassette</PackageProjectUrl>
+    <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/drewnoakes/cassette.git</RepositoryUrl>
+    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.0' ">1.6.0</NetStandardImplicitPackageVersion>
+    <RootNamespace>Cassette</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
+    <Reference Include="System" />
+  </ItemGroup>
+
+</Project>

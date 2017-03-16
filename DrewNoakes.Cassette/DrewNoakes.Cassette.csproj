@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Content-addressable storage for .NET</Description>
+    <Copyright>Drew Noakes 2015-2017</Copyright>
+    <AssemblyTitle>Cassette - Content-addressable storage</AssemblyTitle>
+    <Authors>Drew Noakes</Authors>
+    <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
+    <DebugType>portable</DebugType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
+    <AssemblyName>DrewNoakes.Cassette</AssemblyName>
+    <PackageId>DrewNoakes.Cassette</PackageId>
+    <PackageTags>ContentAddressableStorage;Storage;Database;CAS;FileSystem</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/drewnoakes/cassette/master/CassetteSquare.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/drewnoakes/cassette</PackageProjectUrl>
+    <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/drewnoakes/cassette.git</RepositoryUrl>
+    <RootNamespace>Cassette</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DrewNoakes.Cassette.Types\DrewNoakes.Cassette.Types.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>

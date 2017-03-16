@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5FBD958F-61E4-4ABC-8008-8A96F3E0778D}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,11 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DrewNoakes.Cassette", "DrewNoakes.Cassette\DrewNoakes.Cassette.xproj", "{8A3FD87D-9E7C-4204-923D-90C66F9A4315}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrewNoakes.Cassette", "DrewNoakes.Cassette\DrewNoakes.Cassette.csproj", "{8A3FD87D-9E7C-4204-923D-90C66F9A4315}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DrewNoakes.Cassette.Types", "DrewNoakes.Cassette.Types\DrewNoakes.Cassette.Types.xproj", "{A8CADAEB-66C3-41DA-A16A-8DB71F2FE20F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrewNoakes.Cassette.Types", "DrewNoakes.Cassette.Types\DrewNoakes.Cassette.Types.csproj", "{A8CADAEB-66C3-41DA-A16A-8DB71F2FE20F}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DrewNoakes.Cassette.Tests", "DrewNoakes.Cassette.Tests\DrewNoakes.Cassette.Tests.xproj", "{381BD236-9305-4D2D-96BF-DC815AB4358A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrewNoakes.Cassette.Tests", "DrewNoakes.Cassette.Tests\DrewNoakes.Cassette.Tests.csproj", "{381BD236-9305-4D2D-96BF-DC815AB4358A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
