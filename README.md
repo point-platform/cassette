@@ -40,7 +40,7 @@ For more information, read [Wikipedia's CAS article](http://en.wikipedia.org/wik
 
 * `IContentAddressableStore` exposes functionality of a cassette store
 * `ContentAddressableStore` is the concrete implementation
-* `Hash` holds the identity of a peice of content
+* `Hash` holds the identity of a piece of content
 
 ## Writing content
 
