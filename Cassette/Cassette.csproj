@@ -26,6 +26,11 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cassette.Types\Cassette.Types.csproj" />
+    <Compile Include="..\Cassette.Types\Hash.cs">
+      <Link>Hash.cs</Link>
+    </Compile>
+    <Compile Include="..\Cassette.Types\HashEqualityComparer.cs">
+      <Link>HashEqualityComparer.cs</Link>
+    </Compile>
   </ItemGroup>
 </Project>
