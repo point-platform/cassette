@@ -315,7 +315,7 @@ namespace Cassette
         #endregion
     }
 
-#if DNX451 || NET45
+#if NET45
 
     internal enum HashAlgorithmName
     {
