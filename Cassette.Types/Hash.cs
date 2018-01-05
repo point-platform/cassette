@@ -138,7 +138,7 @@ namespace Cassette
         {
             if (!TryParse(hex, out byte[] bytes))
             {
-                hash = default(Hash);
+                hash = default;
                 return false;
             }
 
