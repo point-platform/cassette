@@ -46,13 +46,13 @@ namespace Cassette
         /// <param name="path">The path of a file to process.</param>
         /// <param name="bufferSize">Optional size of the buffer to use when reading chunks from the stream. Defaults to 4096.</param>
         /// <returns>A task that yields the hash of <paramref name="path"/>'s contents.</returns>
-        public static Task<Hash> ComputeAsync(string path, int bufferSize = 4096)
+        public static async Task<Hash> ComputeAsync(string path, int bufferSize = 4096)
         {
             if (path == null)
                 throw new ArgumentNullException(nameof(path));
 
             using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan))
-                return ComputeAsync(fileStream, bufferSize);
+                return await ComputeAsync(fileStream, bufferSize);
         }
 
         /// <summary>
