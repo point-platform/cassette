@@ -19,6 +19,7 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/drewnoakes/cassette.git</RepositoryUrl>
     <RootNamespace>Cassette</RootNamespace>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System" />
