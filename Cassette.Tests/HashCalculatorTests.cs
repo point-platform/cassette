@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Cassette.Tests
@@ -70,6 +71,16 @@ namespace Cassette.Tests
                 if (expectedHash != actualHash)
                     allCorrect = false;
             }
+        }
+        
+        [Fact]
+        public async Task ComputeFromStreamAsync()
+        {
+            var (bytes, expectedHash) = GenerateTestData();
+
+            var stream = new MemoryStream(bytes);
+            
+            Assert.Equal(expectedHash, await HashCalculator.ComputeAsync(stream));
         }
 
         private static (byte[] bytes, Hash expectedHash) GenerateTestData()
