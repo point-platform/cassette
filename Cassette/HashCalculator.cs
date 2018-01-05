@@ -25,6 +25,7 @@ namespace Cassette
     /// </summary>
     public static class HashCalculator
     {
+        private const int BufferSize = 4096;
         private static readonly SHA1 _hashFunction = SHA1.Create();
 
         /// <summary>
@@ -37,7 +38,7 @@ namespace Cassette
             if (path == null)
                 throw new ArgumentNullException(nameof(path));
 
-            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.SequentialScan))
+            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, BufferSize, FileOptions.SequentialScan))
                 return Compute(fileStream);
         }
 
