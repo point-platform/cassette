@@ -26,19 +26,18 @@ namespace Cassette
     /// </summary>
     public static class HashCalculator
     {
-        private const int BufferSize = 4096;
-
         /// <summary>
         /// Compute the hash over the contents of <paramref name="path"/>.
         /// </summary>
         /// <param name="path">The path of a file to process.</param>
+        /// <param name="bufferSize">Optional size of the buffer to use when reading chunks from the stream. Defaults to 4096.</param>
         /// <returns>The hash of <paramref name="path"/>'s contents.</returns>
-        public static Hash Compute(string path)
+        public static Hash Compute(string path, int bufferSize = 4096)
         {
             if (path == null)
                 throw new ArgumentNullException(nameof(path));
 
-            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, BufferSize, FileOptions.SequentialScan))
+            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan))
                 return Compute(fileStream);
         }
         /// <summary>
@@ -74,23 +73,22 @@ namespace Cassette
         /// Compute the hash over the contents of <paramref name="stream" />, reading asynchronously from the stream.
         /// </summary>
         /// <param name="stream">The stream to process.</param>
+        /// <param name="bufferSize">Optional size of the buffer to use when reading chunks from the stream. Defaults to 4096.</param>
         /// <returns>A task that yields the hash of <paramref name="stream"/>'s contents.</returns>
-        public static async Task<Hash> ComputeAsync(Stream stream)
+        public static async Task<Hash> ComputeAsync(Stream stream, int bufferSize = 4096)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
             using (var hashFunction = IncrementalHash.CreateHash(HashAlgorithmName.SHA1))
-                return Hash.FromBytes(await hashFunction.ComputeHashAsync(stream));
+                return Hash.FromBytes(await hashFunction.ComputeHashAsync(stream, bufferSize));
         }
     }
 
     internal static class IncrementalHashExtensions
     {
-        public static async Task<byte[]> ComputeHashAsync(this IncrementalHash algorithm, Stream inputStream)
+        public static async Task<byte[]> ComputeHashAsync(this IncrementalHash algorithm, Stream inputStream, int bufferSize = 4096)
         {
-            const int bufferSize = 4096;
-
             var buffer = new byte[bufferSize];
             
             while (true)
