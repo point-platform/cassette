@@ -17,6 +17,7 @@
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading;
 using Xunit;
 
 namespace Cassette.Tests
@@ -31,6 +32,44 @@ namespace Cassette.Tests
             var stream = new MemoryStream(bytes);
             
             Assert.Equal(expectedHash, HashCalculator.Compute(stream));
+        }
+        
+        [Fact]
+        public void ComputeFromStreamThreadSafety()
+        {
+            var (bytes, expectedHash) = GenerateTestData();
+
+            const int threadCount = 4;
+
+            var allCorrect = true;
+            
+            var semaphore = new SemaphoreSlim(initialCount: threadCount, maxCount: threadCount);
+            
+            var threads = Enumerable.Range(0, threadCount).Select(_ => new Thread(ThreadMethod)).ToList();
+
+            foreach (var thread in threads)
+                thread.Start();
+
+            Thread.Sleep(100);
+
+            semaphore.Release(threadCount);
+
+            foreach (var thread in threads)
+                thread.Join();
+
+            Assert.True(allCorrect);
+
+            void ThreadMethod()
+            {
+                var stream = new MemoryStream(bytes);
+
+                semaphore.Wait();
+
+                var actualHash = HashCalculator.Compute(stream);
+
+                if (expectedHash != actualHash)
+                    allCorrect = false;
+            }
         }
 
         private static (byte[] bytes, Hash expectedHash) GenerateTestData()

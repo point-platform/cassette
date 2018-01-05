@@ -26,7 +26,6 @@ namespace Cassette
     public static class HashCalculator
     {
         private const int BufferSize = 4096;
-        private static readonly SHA1 _hashFunction = SHA1.Create();
 
         /// <summary>
         /// Compute the hash over the contents of <paramref name="path"/>.
@@ -52,7 +51,8 @@ namespace Cassette
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
-            return Hash.FromBytes(_hashFunction.ComputeHash(stream));
+            using (var hashFunction = SHA1.Create())
+                return Hash.FromBytes(hashFunction.ComputeHash(stream));
         }
     }
 }
