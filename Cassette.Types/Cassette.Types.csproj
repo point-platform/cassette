@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Description>Types exposed by Cassette, a content-addressable storage library for .NET</Description>
     <Copyright>Drew Noakes 2015-2018</Copyright>
-    <VersionPrefix>1.1.1</VersionPrefix>
+    <VersionPrefix>1.2.0</VersionPrefix>
     <AssemblyTitle>Cassette.Types - Content-addressable storage</AssemblyTitle>
     <Authors>Drew Noakes;Krzysztof Dul</Authors>
     <TargetFrameworks>netstandard1.0;net35</TargetFrameworks>
