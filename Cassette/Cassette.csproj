@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <Description>Content-addressable storage for .NET</Description>
     <Copyright>Drew Noakes 2015-2017</Copyright>
@@ -21,14 +20,11 @@
     <RepositoryUrl>https://github.com/drewnoakes/cassette.git</RepositoryUrl>
     <RootNamespace>Cassette</RootNamespace>
   </PropertyGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Cassette.Types\Cassette.Types.csproj" />
   </ItemGroup>
-
 </Project>
