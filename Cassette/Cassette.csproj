@@ -1,36 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>Content-addressable storage for .NET</Description>
-    <Copyright>Drew Noakes 2015-2024</Copyright>
-    <VersionPrefix>1.2.0</VersionPrefix>
-    <AssemblyTitle>Cassette - Content-addressable storage</AssemblyTitle>
-    <Authors>Drew Noakes;Krzysztof Dul</Authors>
+    <Title>Cassette — Content-addressable storage</Title>
     <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
-    <DebugType>portable</DebugType>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <IncludeSymbols>true</IncludeSymbols>
-    <IncludeSource>true</IncludeSource>
-    <AssemblyName>Cassette</AssemblyName>
     <PackageId>DrewNoakes.Cassette</PackageId>
-    <PackageTags>ContentAddressableStorage;Storage;Database;CAS;FileSystem</PackageTags>
-    <PackageIconUrl>https://raw.githubusercontent.com/point-platform/cassette/master/CassetteSquare.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/point-platform/cassette</PackageProjectUrl>
-    <PackageLicense>Apache-2.0</PackageLicense>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/point-platform/cassette.git</RepositoryUrl>
-    <RootNamespace>Cassette</RootNamespace>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Cassette.Types\Hash.cs">
-      <Link>Hash.cs</Link>
-    </Compile>
-    <Compile Include="..\Cassette.Types\HashEqualityComparer.cs">
-      <Link>HashEqualityComparer.cs</Link>
-    </Compile>
+    <Compile Include="..\Cassette.Types\Hash.cs" Link="Hash.cs" />
+    <Compile Include="..\Cassette.Types\HashEqualityComparer.cs" Link="HashEqualityComparer.cs" />
   </ItemGroup>
 </Project>

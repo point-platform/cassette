@@ -1,0 +1,27 @@
+<Project>
+  <PropertyGroup>
+    <Copyright>Drew Noakes 2015-2024</Copyright>
+    <Version>1.2.0</Version>
+    <Authors>Drew Noakes;Krzysztof Dul</Authors>
+    <LangVersion>latest</LangVersion>
+    <DebugType>portable</DebugType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
+    <PackageLicense>Apache-2.0</PackageLicense>
+    <PackageProjectUrl>https://github.com/point-platform/cassette</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/point-platform/cassette.git</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>CassetteSquare.png</PackageIcon>
+    <PackageTags>ContentAddressableStorage;Storage;Database;CAS;FileSystem</PackageTags>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\CassetteSquare.png" Pack="True" PackagePath="\" Visible="False" />
+    <None Include="..\README.md" Pack="True" PackagePath="\" Visible="False" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+  </ItemGroup>
+</Project>
+
