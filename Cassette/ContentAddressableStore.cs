@@ -43,7 +43,7 @@ public sealed class ContentAddressableStore : IContentAddressableStore
     /// <summary>The number of characters from the hash to use for the name of the top level subdirectories.</summary>
     private const int HashPrefixLength = 4;
 
-    private static readonly ReaderWriterLockSlim _fileSystemLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+    private static readonly ReaderWriterLockSlim _fileSystemLock = new(LockRecursionPolicy.NoRecursion);
 
     /// <summary>
     /// Initialises the store to use <paramref name="contentPath"/> as the root for all content.

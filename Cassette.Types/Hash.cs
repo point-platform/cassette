@@ -96,7 +96,7 @@ public readonly struct Hash : IEquatable<Hash>
     /// <exception cref="ArgumentNullException"><paramref name="hex"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentException"><paramref name="hex"/> has incorrect length.</exception>
     /// <exception cref="FormatException"><paramref name="hex"/> has invalid format.</exception>
-    public static Hash Parse(string hex) => new Hash(ParseToBytes(hex));
+    public static Hash Parse(string hex) => new(ParseToBytes(hex));
 
     /// <summary>
     /// Creates a <see cref="Hash"/> from a byte array.
