@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <Copyright>Drew Noakes 2015-2024</Copyright>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
     <Authors>Drew Noakes;Krzysztof Dul</Authors>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
