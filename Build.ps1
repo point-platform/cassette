@@ -30,7 +30,7 @@ if ((test-path $msbuild) -eq $false) {
     exit 2
 }
 
-&$msbuild Cassette\Cassette.csproj /t:Build,Pack /p:Configuration=Release /p:PackageOutputPath=..\artifacts
-&$msbuild Cassette.Types\Cassette.Types.csproj /t:Build,Pack /p:Configuration=Release /p:PackageOutputPath=..\artifacts
+&$msbuild Cassette\Cassette.csproj /t:Build,Pack /p:Configuration=Release /p:ContinuousIntegrationBuild=true /p:PackageOutputPath=..\artifacts
+&$msbuild Cassette.Types\Cassette.Types.csproj /t:Build,Pack /p:Configuration=Release /p:ContinuousIntegrationBuild=true /p:PackageOutputPath=..\artifacts
 
 Pop-Location

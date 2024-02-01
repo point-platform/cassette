@@ -62,7 +62,7 @@ public readonly struct Hash : IEquatable<Hash>
         if (_bytes is null)
             return "0000000000000000000000000000000000000000";
 
-        var s = new StringBuilder();
+        var s = new StringBuilder(capacity: StringLength);
         foreach (var b in _bytes)
             s.Append(b.ToString("X2"));
         return s.ToString();
@@ -84,7 +84,7 @@ public readonly struct Hash : IEquatable<Hash>
         if (hash.Length != ByteCount)
             throw new ArgumentException("Incorrect number of bytes", nameof(hash));
 
-        var s = new StringBuilder();
+        var s = new StringBuilder(capacity: StringLength);
         foreach (var b in hash)
             s.Append(b.ToString("X2"));
         return s.ToString();
