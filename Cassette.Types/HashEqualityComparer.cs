@@ -40,23 +40,23 @@ public sealed class HashBytesEqualityComparer : IEqualityComparer<byte[]?>
         // Implementation from http://stackoverflow.com/a/468084/24874
 
         unchecked
-		    {
-			    const int p = 0x1000193;
+        {
+            const int p = 0x1000193;
 
             var code = (int)0x811c9dc5;
 
-		        // ReSharper disable once LoopCanBeConvertedToQuery
-		        // ReSharper disable once ForCanBeConvertedToForeach
-			    for (var i = 0; i < hash.Length; i++)
-				    code = (code ^ hash[i]) * p;
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (var i = 0; i < hash.Length; i++)
+                code = (code ^ hash[i]) * p;
 
-			    code += code << 13;
-			    code ^= code >> 7;
-			    code += code << 3;
-			    code ^= code >> 17;
-			    code += code << 5;
+            code += code << 13;
+            code ^= code >> 7;
+            code += code << 3;
+            code ^= code >> 17;
+            code += code << 5;
 
             return code;
-		    }
+        }
     }
 }
