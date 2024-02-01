@@ -21,75 +21,74 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Cassette.Tests
+namespace Cassette.Tests;
+
+public sealed class HashCalculatorTests
 {
-    public sealed class HashCalculatorTests
+    [Fact]
+    public void ComputeFromStream()
     {
-        [Fact]
-        public void ComputeFromStream()
-        {
-            var (bytes, expectedHash) = GenerateTestData();
+        var (bytes, expectedHash) = GenerateTestData();
 
-            var stream = new MemoryStream(bytes);
-            
-            Assert.Equal(expectedHash, HashCalculator.Compute(stream));
-        }
+        var stream = new MemoryStream(bytes);
         
-        [Fact]
-        public void ComputeFromStreamThreadSafety()
-        {
-            var (bytes, expectedHash) = GenerateTestData();
+        Assert.Equal(expectedHash, HashCalculator.Compute(stream));
+    }
+    
+    [Fact]
+    public void ComputeFromStreamThreadSafety()
+    {
+        var (bytes, expectedHash) = GenerateTestData();
 
-            const int threadCount = 4;
+        const int threadCount = 4;
 
-            var allCorrect = true;
-            
-            var semaphore = new SemaphoreSlim(initialCount: threadCount, maxCount: threadCount);
-            
-            var threads = Enumerable.Range(0, threadCount).Select(_ => new Thread(ThreadMethod)).ToList();
-
-            foreach (var thread in threads)
-                thread.Start();
-
-            Thread.Sleep(100);
-
-            semaphore.Release(threadCount);
-
-            foreach (var thread in threads)
-                thread.Join();
-
-            Assert.True(allCorrect);
-
-            void ThreadMethod()
-            {
-                var stream = new MemoryStream(bytes);
-
-                semaphore.Wait();
-
-                var actualHash = HashCalculator.Compute(stream);
-
-                if (expectedHash != actualHash)
-                    allCorrect = false;
-            }
-        }
+        var allCorrect = true;
         
-        [Fact]
-        public async Task ComputeFromStreamAsync()
-        {
-            var (bytes, expectedHash) = GenerateTestData();
+        var semaphore = new SemaphoreSlim(initialCount: threadCount, maxCount: threadCount);
+        
+        var threads = Enumerable.Range(0, threadCount).Select(_ => new Thread(ThreadMethod)).ToList();
 
+        foreach (var thread in threads)
+            thread.Start();
+
+        Thread.Sleep(100);
+
+        semaphore.Release(threadCount);
+
+        foreach (var thread in threads)
+            thread.Join();
+
+        Assert.True(allCorrect);
+
+        void ThreadMethod()
+        {
             var stream = new MemoryStream(bytes);
-            
-            Assert.Equal(expectedHash, await HashCalculator.ComputeAsync(stream));
-        }
 
-        private static (byte[] bytes, Hash expectedHash) GenerateTestData()
-        {
-            var bytes = Enumerable.Range(0, 10 * 1024 * 1024).Select(i => (byte) i).ToArray();
+            semaphore.Wait();
 
-            var expectedHash = SHA1.Create().ComputeHash(bytes);
-            
-            return (bytes, Hash.FromBytes(expectedHash));
+            var actualHash = HashCalculator.Compute(stream);
+
+            if (expectedHash != actualHash)
+                allCorrect = false;
         }
+    }
+    
+    [Fact]
+    public async Task ComputeFromStreamAsync()
+    {
+        var (bytes, expectedHash) = GenerateTestData();
+
+        var stream = new MemoryStream(bytes);
+        
+        Assert.Equal(expectedHash, await HashCalculator.ComputeAsync(stream));
+    }
+
+    private static (byte[] bytes, Hash expectedHash) GenerateTestData()
+    {
+        var bytes = Enumerable.Range(0, 10 * 1024 * 1024).Select(i => (byte) i).ToArray();
+
+        var expectedHash = SHA1.Create().ComputeHash(bytes);
+        
+        return (bytes, Hash.FromBytes(expectedHash));
     }
 }

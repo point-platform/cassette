@@ -19,89 +19,88 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace Cassette
+namespace Cassette;
+
+/// <summary>
+/// Computes hashes from data.
+/// </summary>
+public static class HashCalculator
 {
     /// <summary>
-    /// Computes hashes from data.
+    /// Compute the hash over the contents of <paramref name="path"/>.
     /// </summary>
-    public static class HashCalculator
+    /// <param name="path">The path of a file to process.</param>
+    /// <param name="bufferSize">Optional size of the buffer to use when reading chunks from the stream. Defaults to 4096.</param>
+    /// <returns>The hash of <paramref name="path"/>'s contents.</returns>
+    public static Hash Compute(string path, int bufferSize = 4096)
     {
-        /// <summary>
-        /// Compute the hash over the contents of <paramref name="path"/>.
-        /// </summary>
-        /// <param name="path">The path of a file to process.</param>
-        /// <param name="bufferSize">Optional size of the buffer to use when reading chunks from the stream. Defaults to 4096.</param>
-        /// <returns>The hash of <paramref name="path"/>'s contents.</returns>
-        public static Hash Compute(string path, int bufferSize = 4096)
-        {
-            if (path == null)
-                throw new ArgumentNullException(nameof(path));
+        if (path == null)
+            throw new ArgumentNullException(nameof(path));
 
-            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan))
-                return Compute(fileStream);
-        }
-        /// <summary>
-        /// Compute the hash over the contents of <paramref name="path"/>.
-        /// </summary>
-        /// <param name="path">The path of a file to process.</param>
-        /// <param name="bufferSize">Optional size of the buffer to use when reading chunks from the stream. Defaults to 4096.</param>
-        /// <returns>A task that yields the hash of <paramref name="path"/>'s contents.</returns>
-        public static async Task<Hash> ComputeAsync(string path, int bufferSize = 4096)
-        {
-            if (path == null)
-                throw new ArgumentNullException(nameof(path));
+        using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan))
+            return Compute(fileStream);
+    }
+    /// <summary>
+    /// Compute the hash over the contents of <paramref name="path"/>.
+    /// </summary>
+    /// <param name="path">The path of a file to process.</param>
+    /// <param name="bufferSize">Optional size of the buffer to use when reading chunks from the stream. Defaults to 4096.</param>
+    /// <returns>A task that yields the hash of <paramref name="path"/>'s contents.</returns>
+    public static async Task<Hash> ComputeAsync(string path, int bufferSize = 4096)
+    {
+        if (path == null)
+            throw new ArgumentNullException(nameof(path));
 
-            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan))
-                return await ComputeAsync(fileStream, bufferSize);
-        }
-
-        /// <summary>
-        /// Compute the hash over the contents of <paramref name="stream" />.
-        /// </summary>
-        /// <param name="stream">The stream to process.</param>
-        /// <returns>The hash of <paramref name="stream"/>'s contents.</returns>
-        public static Hash Compute(Stream stream)
-        {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-
-            using (var hashFunction = SHA1.Create())
-                return Hash.FromBytes(hashFunction.ComputeHash(stream));
-        }
-
-        /// <summary>
-        /// Compute the hash over the contents of <paramref name="stream" />, reading asynchronously from the stream.
-        /// </summary>
-        /// <param name="stream">The stream to process.</param>
-        /// <param name="bufferSize">Optional size of the buffer to use when reading chunks from the stream. Defaults to 4096.</param>
-        /// <returns>A task that yields the hash of <paramref name="stream"/>'s contents.</returns>
-        public static async Task<Hash> ComputeAsync(Stream stream, int bufferSize = 4096)
-        {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-
-            using (var hashFunction = IncrementalHash.CreateHash(HashAlgorithmName.SHA1))
-                return Hash.FromBytes(await hashFunction.ComputeHashAsync(stream, bufferSize));
-        }
+        using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan))
+            return await ComputeAsync(fileStream, bufferSize);
     }
 
-    internal static class IncrementalHashExtensions
+    /// <summary>
+    /// Compute the hash over the contents of <paramref name="stream" />.
+    /// </summary>
+    /// <param name="stream">The stream to process.</param>
+    /// <returns>The hash of <paramref name="stream"/>'s contents.</returns>
+    public static Hash Compute(Stream stream)
     {
-        public static async Task<byte[]> ComputeHashAsync(this IncrementalHash algorithm, Stream inputStream, int bufferSize = 4096)
+        if (stream == null)
+            throw new ArgumentNullException(nameof(stream));
+
+        using (var hashFunction = SHA1.Create())
+            return Hash.FromBytes(hashFunction.ComputeHash(stream));
+    }
+
+    /// <summary>
+    /// Compute the hash over the contents of <paramref name="stream" />, reading asynchronously from the stream.
+    /// </summary>
+    /// <param name="stream">The stream to process.</param>
+    /// <param name="bufferSize">Optional size of the buffer to use when reading chunks from the stream. Defaults to 4096.</param>
+    /// <returns>A task that yields the hash of <paramref name="stream"/>'s contents.</returns>
+    public static async Task<Hash> ComputeAsync(Stream stream, int bufferSize = 4096)
+    {
+        if (stream == null)
+            throw new ArgumentNullException(nameof(stream));
+
+        using (var hashFunction = IncrementalHash.CreateHash(HashAlgorithmName.SHA1))
+            return Hash.FromBytes(await hashFunction.ComputeHashAsync(stream, bufferSize));
+    }
+}
+
+internal static class IncrementalHashExtensions
+{
+    public static async Task<byte[]> ComputeHashAsync(this IncrementalHash algorithm, Stream inputStream, int bufferSize = 4096)
+    {
+        var buffer = new byte[bufferSize];
+        
+        while (true)
         {
-            var buffer = new byte[bufferSize];
-            
-            while (true)
-            {
-                var read = await inputStream.ReadAsync(buffer, 0, bufferSize);
+            var read = await inputStream.ReadAsync(buffer, 0, bufferSize);
 
-                if (read == 0)
-                    break;
+            if (read == 0)
+                break;
 
-                algorithm.AppendData(buffer, 0, read);
-            }
-            
-            return algorithm.GetHashAndReset();
+            algorithm.AppendData(buffer, 0, read);
         }
+        
+        return algorithm.GetHashAndReset();
     }
 }

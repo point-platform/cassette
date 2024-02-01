@@ -16,34 +16,34 @@
 
 using System.Collections.Generic;
 
-namespace Cassette
+namespace Cassette;
+
+/// <summary>
+/// Implementation of <see cref="IEqualityComparer{T}"/> for hash byte arrays.
+/// </summary>
+public sealed class HashBytesEqualityComparer : IEqualityComparer<byte[]?>
 {
-    /// <summary>
-    /// Implementation of <see cref="IEqualityComparer{T}"/> for hash byte arrays.
-    /// </summary>
-    public sealed class HashBytesEqualityComparer : IEqualityComparer<byte[]?>
+    /// <inheritdoc />
+    public bool Equals(byte[]? x, byte[]? y)
     {
-        /// <inheritdoc />
-        public bool Equals(byte[]? x, byte[]? y)
-        {
-            if (x == null ^ y == null)
-                return false;
-            return ReferenceEquals(x, y) || Hash.Equals(x, y);
-        }
+        if (x == null ^ y == null)
+            return false;
+        return ReferenceEquals(x, y) || Hash.Equals(x, y);
+    }
 
-        /// <inheritdoc />
-        public int GetHashCode(byte[]? hash)
-        {
-            if (hash is null)
-                return 0;
+    /// <inheritdoc />
+    public int GetHashCode(byte[]? hash)
+    {
+        if (hash is null)
+            return 0;
 
-            // Implementation from http://stackoverflow.com/a/468084/24874
+        // Implementation from http://stackoverflow.com/a/468084/24874
 
-            unchecked
+        unchecked
 		    {
 			    const int p = 0x1000193;
 
-                var code = (int)0x811c9dc5;
+            var code = (int)0x811c9dc5;
 
 		        // ReSharper disable once LoopCanBeConvertedToQuery
 		        // ReSharper disable once ForCanBeConvertedToForeach
@@ -56,8 +56,7 @@ namespace Cassette
 			    code ^= code >> 17;
 			    code += code << 5;
 
-                return code;
+            return code;
 		    }
-        }
     }
 }
