@@ -15,7 +15,7 @@
     <PackageTags>ContentAddressableStorage;Storage;Database;CAS;FileSystem</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/point-platform/cassette/master/CassetteSquare.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/point-platform/cassette</PackageProjectUrl>
-    <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
+    <PackageLicense>Apache-2.0</PackageLicense>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/point-platform/cassette.git</RepositoryUrl>
     <RootNamespace>Cassette</RootNamespace>
