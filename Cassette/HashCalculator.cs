@@ -34,7 +34,7 @@ public static class HashCalculator
     /// <returns>The hash of <paramref name="path"/>'s contents.</returns>
     public static Hash Compute(string path, int bufferSize = 4096)
     {
-        if (path == null)
+        if (path is null)
             throw new ArgumentNullException(nameof(path));
 
         using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan))
@@ -48,7 +48,7 @@ public static class HashCalculator
     /// <returns>A task that yields the hash of <paramref name="path"/>'s contents.</returns>
     public static async Task<Hash> ComputeAsync(string path, int bufferSize = 4096)
     {
-        if (path == null)
+        if (path is null)
             throw new ArgumentNullException(nameof(path));
 
         using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan))
@@ -62,7 +62,7 @@ public static class HashCalculator
     /// <returns>The hash of <paramref name="stream"/>'s contents.</returns>
     public static Hash Compute(Stream stream)
     {
-        if (stream == null)
+        if (stream is null)
             throw new ArgumentNullException(nameof(stream));
 
         using (var hashFunction = SHA1.Create())
@@ -77,7 +77,7 @@ public static class HashCalculator
     /// <returns>A task that yields the hash of <paramref name="stream"/>'s contents.</returns>
     public static async Task<Hash> ComputeAsync(Stream stream, int bufferSize = 4096)
     {
-        if (stream == null)
+        if (stream is null)
             throw new ArgumentNullException(nameof(stream));
 
         using (var hashFunction = IncrementalHash.CreateHash(HashAlgorithmName.SHA1))

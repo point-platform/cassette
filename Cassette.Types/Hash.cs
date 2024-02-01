@@ -59,7 +59,7 @@ public readonly struct Hash : IEquatable<Hash>
     /// </example>
     public override string ToString()
     {
-        if (_bytes == null)
+        if (_bytes is null)
             return "0000000000000000000000000000000000000000";
 
         var s = new StringBuilder();
@@ -79,7 +79,7 @@ public readonly struct Hash : IEquatable<Hash>
     /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <see langword="null"/>.</exception>
     public static string Format(byte[] hash)
     {
-        if (hash == null)
+        if (hash is null)
             throw new ArgumentNullException(nameof(hash));
         if (hash.Length != ByteCount)
             throw new ArgumentException("Incorrect number of bytes", nameof(hash));
@@ -118,7 +118,7 @@ public readonly struct Hash : IEquatable<Hash>
     /// <exception cref="FormatException"><paramref name="hex"/> has invalid format.</exception>
     private static byte[] ParseToBytes(string hex)
     {
-        if (hex == null)
+        if (hex is null)
             throw new ArgumentNullException(nameof(hex));
 
         if (hex.Length != StringLength)
@@ -153,7 +153,7 @@ public readonly struct Hash : IEquatable<Hash>
     /// <returns><see langword="true"/> if the parse was successful, otherwise <see langword="false"/>.</returns>
     public static bool TryParse(string? hex, [NotNullWhen(returnValue: true)] out byte[]? hash)
     {
-        if (hex == null || hex.Length != StringLength)
+        if (hex is null || hex.Length != StringLength)
         {
             hash = null;
             return false;
@@ -211,7 +211,7 @@ public readonly struct Hash : IEquatable<Hash>
     /// Note that you never have to test validity of a <see cref="Hash"/> instance, as they are always
     /// in a valid state.
     /// </remarks>
-    public static bool IsValid(byte[]? hash) => hash != null && hash.Length == ByteCount;
+    public static bool IsValid(byte[]? hash) => hash is not null && hash.Length == ByteCount;
 
     #endregion
 
@@ -220,10 +220,10 @@ public readonly struct Hash : IEquatable<Hash>
     /// <inheritdoc />
     public bool Equals(Hash other)
     {
-        if (_bytes == null)
-            return other._bytes == null;
-        if (other._bytes == null)
-            return _bytes == null;
+        if (_bytes is null)
+            return other._bytes is null;
+        if (other._bytes is null)
+            return _bytes is null;
 
         for (var i = 0; i < ByteCount; i++)
         {
@@ -237,7 +237,7 @@ public readonly struct Hash : IEquatable<Hash>
     /// <inheritdoc />
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj))
+        if (obj is null)
             return false;
         return obj is Hash hash && Equals(hash);
     }
@@ -245,7 +245,7 @@ public readonly struct Hash : IEquatable<Hash>
     /// <inheritdoc />
     public override int GetHashCode()
     {
-        if (_bytes == null)
+        if (_bytes is null)
             return 0;
 
         unchecked

@@ -71,7 +71,7 @@ public sealed class ContentAddressableStore : IContentAddressableStore
     /// <inheritdoc />
     public async Task<Hash> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken(), IEnumerable<IContentEncoding>? encodings = null)
     {
-        if (stream == null)
+        if (stream is null)
             throw new ArgumentNullException(nameof(stream));
 
         // Create a new, empty temporary file
@@ -103,7 +103,7 @@ public sealed class ContentAddressableStore : IContentAddressableStore
                     // Start read a chunk of data into the buffer asynchronously
                     var readTask = stream.ReadAsync(buffers[bufferIndex], 0, BufferSize, cancellationToken);
 
-                    if (writeTask != null)
+                    if (writeTask is not null)
                         await Task.WhenAll(readTask, writeTask);
 
                     var readCount = readTask.Result;
@@ -166,7 +166,7 @@ public sealed class ContentAddressableStore : IContentAddressableStore
             }
 
             // Write any encoded forms of the content too
-            if (encodings != null)
+            if (encodings is not null)
             {
                 foreach (var encoding in encodings)
                 {
@@ -206,18 +206,12 @@ public sealed class ContentAddressableStore : IContentAddressableStore
     /// <inheritdoc />
     public bool Contains(Hash hash, string? encodingName = null)
     {
-        if (hash == null)
-            throw new ArgumentNullException(nameof(hash));
-
         return File.Exists(GetContentPath(hash, encodingName));
     }
 
     /// <inheritdoc />
     public bool TryRead(Hash hash, [NotNullWhen(returnValue: true)] out Stream? stream, ReadOptions options = ReadOptions.None, string? encodingName = null)
     {
-        if (hash == null)
-            throw new ArgumentNullException(nameof(hash));
-
         var contentPath = GetContentPath(hash, encodingName);
 
         if (!File.Exists(contentPath))
@@ -236,9 +230,6 @@ public sealed class ContentAddressableStore : IContentAddressableStore
     /// <inheritdoc />
     public bool TryGetContentLength(Hash hash, out long length, string? encodingName = null)
     {
-        if (hash == null)
-            throw new ArgumentNullException(nameof(hash));
-
         var contentPath = GetContentPath(hash, encodingName);
 
         if (!File.Exists(contentPath))
@@ -297,7 +288,7 @@ public sealed class ContentAddressableStore : IContentAddressableStore
         var hashString = hash.ToString();
         subPath = GetSubPath(hashString);
         contentPath = Path.Combine(subPath, hashString.Substring(HashPrefixLength));
-        if (encodingName != null)
+        if (encodingName is not null)
             contentPath += "." + encodingName;
     }
 
@@ -306,7 +297,7 @@ public sealed class ContentAddressableStore : IContentAddressableStore
         var hashString = hash.ToString();
         var subPath = GetSubPath(hashString);
         var contentPath = Path.Combine(subPath, hashString.Substring(HashPrefixLength));
-        return encodingName != null
+        return encodingName is not null
             ? contentPath + "." + encodingName
             : contentPath;
     }

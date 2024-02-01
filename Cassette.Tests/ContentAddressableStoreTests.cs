@@ -43,7 +43,7 @@ public class ContentAddressableStoreTests : IDisposable
 
     public void Dispose()
     {
-        if (_contentPath == null)
+        if (_contentPath is null)
             return;
 
         // Recursively delete all generated content

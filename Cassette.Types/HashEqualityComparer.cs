@@ -26,7 +26,7 @@ public sealed class HashBytesEqualityComparer : IEqualityComparer<byte[]?>
     /// <inheritdoc />
     public bool Equals(byte[]? x, byte[]? y)
     {
-        if (x == null ^ y == null)
+        if (x is null ^ y is null)
             return false;
         return ReferenceEquals(x, y) || Hash.Equals(x, y);
     }
