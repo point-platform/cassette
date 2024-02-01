@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>Types exposed by Cassette, a content-addressable storage library for .NET</Description>
-    <Copyright>Drew Noakes 2015-2018</Copyright>
+    <Copyright>Drew Noakes 2015-2024</Copyright>
     <VersionPrefix>1.2.0</VersionPrefix>
     <AssemblyTitle>Cassette.Types - Content-addressable storage</AssemblyTitle>
     <Authors>Drew Noakes;Krzysztof Dul</Authors>
