@@ -31,7 +31,7 @@ namespace Cassette;
 /// <para />
 /// Internally, this type holds a single <c>byte[]</c> with 20 elements.
 /// </remarks>
-public struct Hash : IEquatable<Hash>
+public readonly struct Hash : IEquatable<Hash>
 {
     /// <summary>
     /// The length of a hash in string form used by <see cref="Format"/> and <see cref="Parse"/>.
