@@ -54,7 +54,7 @@ public sealed class HashTests
 
         Assert.False(Hash.IsValid(new byte[Hash.ByteCount - 1]));
         Assert.False(Hash.IsValid(new byte[Hash.ByteCount + 1]));
-        Assert.False(Hash.IsValid(new byte[0]));
+        Assert.False(Hash.IsValid([]));
         Assert.False(Hash.IsValid((byte[]?)null));
     }
 }

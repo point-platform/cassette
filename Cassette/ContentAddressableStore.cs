@@ -346,7 +346,7 @@ internal sealed class IncrementalHash : IDisposable
 
     public byte[] GetHashAndReset()
     {
-        _hash.TransformFinalBlock(new byte[0], 0, 0);
+        _hash.TransformFinalBlock([], 0, 0);
         return _hash.Hash;
     }
 
