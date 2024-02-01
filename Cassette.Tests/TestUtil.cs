@@ -60,7 +60,7 @@ namespace Cassette.Tests
         public static Hash CalculateHash(MemoryStream stream)
         {
             // NOTE we need a new instance for each calculation as it's not threadsafe
-            using (var hash = new SHA1CryptoServiceProvider())
+            using (var hash = SHA1.Create())
                 return Hash.FromBytes(hash.ComputeHash(stream));
         }
     }
