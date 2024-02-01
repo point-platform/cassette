@@ -76,7 +76,7 @@ public struct Hash : IEquatable<Hash>
     /// <remarks>
     /// An example of this string is <c>40613A45BC715AE4A34895CBDD6122E982FE3DF5</c>.
     /// </remarks>
-    /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <see langword="null"/>.</exception>
     public static string Format(byte[] hash)
     {
         if (hash == null)
@@ -93,7 +93,7 @@ public struct Hash : IEquatable<Hash>
     /// <summary>
     /// Parse the hexadecimal string <paramref name="hex"/> into a <see cref="Hash"/>.
     /// </summary>
-    /// <exception cref="ArgumentNullException"><paramref name="hex"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="hex"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentException"><paramref name="hex"/> has incorrect length.</exception>
     /// <exception cref="FormatException"><paramref name="hex"/> has invalid format.</exception>
     public static Hash Parse(string hex) => new Hash(ParseToBytes(hex));
@@ -113,7 +113,7 @@ public struct Hash : IEquatable<Hash>
     /// <summary>
     /// Parse the hexadecimal string <paramref name="hex"/> into a 20 element byte array.
     /// </summary>
-    /// <exception cref="ArgumentNullException"><paramref name="hex"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="hex"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentException"><paramref name="hex"/> has incorrect length.</exception>
     /// <exception cref="FormatException"><paramref name="hex"/> has invalid format.</exception>
     private static byte[] ParseToBytes(string hex)
@@ -134,7 +134,7 @@ public struct Hash : IEquatable<Hash>
     /// <summary>
     /// Attempt to parse the hexadecimal string <paramref name="hex"/> into a <see cref="Hash"/>.
     /// </summary>
-    /// <returns><c>true</c> if the parse was successful, otherwise <c>false</c>.</returns>
+    /// <returns><see langword="true"/> if the parse was successful, otherwise <see langword="false"/>.</returns>
     public static bool TryParse(string? hex, out Hash hash)
     {
         if (!TryParse(hex, out byte[]? bytes))
@@ -150,7 +150,7 @@ public struct Hash : IEquatable<Hash>
     /// <summary>
     /// Attempt to parse the hexadecimal string <paramref name="hex"/> into a 20 element byte array.
     /// </summary>
-    /// <returns><c>true</c> if the parse was successful, otherwise <c>false</c>.</returns>
+    /// <returns><see langword="true"/> if the parse was successful, otherwise <see langword="false"/>.</returns>
     public static bool TryParse(string? hex, [NotNullWhen(returnValue: true)] out byte[]? hash)
     {
         if (hex == null || hex.Length != StringLength)
@@ -175,7 +175,7 @@ public struct Hash : IEquatable<Hash>
     /// Get a value indicating whether <paramref name="hash"/> is a valid hexadecimal hash string.
     /// </summary>
     /// <remarks>
-    /// This method verifies that <paramref name="hash"/> is not <c>null</c> and has the correct length.
+    /// This method verifies that <paramref name="hash"/> is not <see langword="null"/> and has the correct length.
     /// <para />
     /// Note that you never have to test validity of a <see cref="Hash"/> instance, as they are always
     /// in a valid state.
@@ -206,7 +206,7 @@ public struct Hash : IEquatable<Hash>
     /// Get a value indicating whether <paramref name="hash"/> is a valid hash array.
     /// </summary>
     /// <remarks>
-    /// This method verifies <paramref name="hash"/> is not <c>null</c> and has the correct length.
+    /// This method verifies <paramref name="hash"/> is not <see langword="null"/> and has the correct length.
     /// <para />
     /// Note that you never have to test validity of a <see cref="Hash"/> instance, as they are always
     /// in a valid state.
