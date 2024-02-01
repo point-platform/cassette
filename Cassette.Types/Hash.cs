@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
@@ -134,9 +135,9 @@ namespace Cassette
         /// Attempt to parse the hexadecimal string <paramref name="hex"/> into a <see cref="Hash"/>.
         /// </summary>
         /// <returns><c>true</c> if the parse was successful, otherwise <c>false</c>.</returns>
-        public static bool TryParse(string hex, out Hash hash)
+        public static bool TryParse(string? hex, out Hash hash)
         {
-            if (!TryParse(hex, out byte[] bytes))
+            if (!TryParse(hex, out byte[]? bytes))
             {
                 hash = default;
                 return false;
@@ -150,7 +151,7 @@ namespace Cassette
         /// Attempt to parse the hexadecimal string <paramref name="hex"/> into a 20 element byte array.
         /// </summary>
         /// <returns><c>true</c> if the parse was successful, otherwise <c>false</c>.</returns>
-        public static bool TryParse(string hex, out byte[] hash)
+        public static bool TryParse(string? hex, [NotNullWhen(returnValue: true)] out byte[]? hash)
         {
             if (hex == null || hex.Length != StringLength)
             {
@@ -179,7 +180,7 @@ namespace Cassette
         /// Note that you never have to test validity of a <see cref="Hash"/> instance, as they are always
         /// in a valid state.
         /// </remarks>
-        public static bool IsValid(string hash)
+        public static bool IsValid(string? hash)
         {
             if (hash?.Length != StringLength)
                 return false;
@@ -210,7 +211,7 @@ namespace Cassette
         /// Note that you never have to test validity of a <see cref="Hash"/> instance, as they are always
         /// in a valid state.
         /// </remarks>
-        public static bool IsValid(byte[] hash) => hash != null && hash.Length == ByteCount;
+        public static bool IsValid(byte[]? hash) => hash != null && hash.Length == ByteCount;
 
         #endregion
 

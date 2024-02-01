@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,7 +46,7 @@ namespace Cassette
         /// <param name="encodings">A sequence of encodings to also store this content with. If <c>null</c> or empty, no additional encodings are used.</param>
         /// <returns>An async task, the result of which is the written content's hash.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
-        Task<Hash> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken(), IEnumerable<IContentEncoding> encodings = null);
+        Task<Hash> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken(), IEnumerable<IContentEncoding>? encodings = null);
 
         /// <summary>
         /// Gets a value indicating whether content exists in the store with the specified <paramref name="hash"/>.
@@ -54,7 +55,7 @@ namespace Cassette
         /// <param name="encodingName">Conditions the check on whether the content exists with the specified encoding. If <c>null</c>, the check indicates whether the unencoded content exists in the store.</param>
         /// <returns><c>true</c> if the content exists in the store, otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <c>null</c>.</exception>
-        bool Contains(Hash hash, string encodingName = null);
+        bool Contains(Hash hash, string? encodingName = null);
 
         /// <summary>
         /// Read content from the store.
@@ -73,7 +74,7 @@ namespace Cassette
         /// <param name="encodingName">The encoding used when storing the content, or <c>null</c> to access the unencoded content.</param>
         /// <returns><c>true</c> if the content was found, otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <c>null</c>.</exception>
-        bool TryRead(Hash hash, out Stream stream, ReadOptions options = ReadOptions.None, string encodingName = null);
+        bool TryRead(Hash hash, [NotNullWhen(returnValue: true)] out Stream? stream, ReadOptions options = ReadOptions.None, string? encodingName = null);
 
         /// <summary>
         /// Get the length of stored content.
@@ -83,7 +84,7 @@ namespace Cassette
         /// <param name="encodingName">The encoding used when storing the content, or <c>null</c> to access the unencoded content.</param>
         /// <returns><c>true</c> if the requested content exists, otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="hash"/> is <c>null</c>.</exception>
-        bool TryGetContentLength(Hash hash, out long length, string encodingName = null);
+        bool TryGetContentLength(Hash hash, out long length, string? encodingName = null);
 
         /// <summary>
         /// Get an enumeration over all hashes contained within the store.

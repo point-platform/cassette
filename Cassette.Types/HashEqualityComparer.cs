@@ -21,10 +21,10 @@ namespace Cassette
     /// <summary>
     /// Implementation of <see cref="IEqualityComparer{T}"/> for hash byte arrays.
     /// </summary>
-    public sealed class HashBytesEqualityComparer : IEqualityComparer<byte[]>
+    public sealed class HashBytesEqualityComparer : IEqualityComparer<byte[]?>
     {
         /// <inheritdoc />
-        public bool Equals(byte[] x, byte[] y)
+        public bool Equals(byte[]? x, byte[]? y)
         {
             if (x == null ^ y == null)
                 return false;
@@ -32,8 +32,11 @@ namespace Cassette
         }
 
         /// <inheritdoc />
-        public int GetHashCode(byte[] hash)
+        public int GetHashCode(byte[]? hash)
         {
+            if (hash is null)
+                return 0;
+
             // Implementation from http://stackoverflow.com/a/468084/24874
 
             unchecked

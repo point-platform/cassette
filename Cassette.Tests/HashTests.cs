@@ -48,14 +48,14 @@ namespace Cassette.Tests
             Assert.False(Hash.IsValid("0000000000000000000000000000000000000000111"));
             Assert.False(Hash.IsValid("0000000000000000000000000000000000000"));
             Assert.False(Hash.IsValid("xyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzxyzx"));
-            Assert.False(Hash.IsValid((string)null));
+            Assert.False(Hash.IsValid((string?)null));
 
             Assert.True(Hash.IsValid(new byte[Hash.ByteCount]));
 
             Assert.False(Hash.IsValid(new byte[Hash.ByteCount - 1]));
             Assert.False(Hash.IsValid(new byte[Hash.ByteCount + 1]));
             Assert.False(Hash.IsValid(new byte[0]));
-            Assert.False(Hash.IsValid((byte[])null));
+            Assert.False(Hash.IsValid((byte[]?)null));
         }
     }
 }

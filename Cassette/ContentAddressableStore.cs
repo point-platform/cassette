@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -68,7 +69,7 @@ namespace Cassette
         }
 
         /// <inheritdoc />
-        public async Task<Hash> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken(), IEnumerable<IContentEncoding> encodings = null)
+        public async Task<Hash> WriteAsync(Stream stream, CancellationToken cancellationToken = new CancellationToken(), IEnumerable<IContentEncoding>? encodings = null)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
@@ -91,7 +92,7 @@ namespace Cassette
                     var buffers = new[] { new byte[BufferSize], new byte[BufferSize] };
 
                     var bufferIndex = 0;
-                    var writeTask = (Task)null;
+                    var writeTask = (Task?)null;
 
                     // Loop until the source stream is exhausted
                     while (true)
@@ -203,7 +204,7 @@ namespace Cassette
         }
 
         /// <inheritdoc />
-        public bool Contains(Hash hash, string encodingName = null)
+        public bool Contains(Hash hash, string? encodingName = null)
         {
             if (hash == null)
                 throw new ArgumentNullException(nameof(hash));
@@ -212,7 +213,7 @@ namespace Cassette
         }
 
         /// <inheritdoc />
-        public bool TryRead(Hash hash, out Stream stream, ReadOptions options = ReadOptions.None, string encodingName = null)
+        public bool TryRead(Hash hash, [NotNullWhen(returnValue: true)] out Stream? stream, ReadOptions options = ReadOptions.None, string? encodingName = null)
         {
             if (hash == null)
                 throw new ArgumentNullException(nameof(hash));
@@ -233,7 +234,7 @@ namespace Cassette
         }
 
         /// <inheritdoc />
-        public bool TryGetContentLength(Hash hash, out long length, string encodingName = null)
+        public bool TryGetContentLength(Hash hash, out long length, string? encodingName = null)
         {
             if (hash == null)
                 throw new ArgumentNullException(nameof(hash));
@@ -291,7 +292,7 @@ namespace Cassette
 
         #region Computing paths
 
-        private void GetPaths(Hash hash, string encodingName, out string subPath, out string contentPath)
+        private void GetPaths(Hash hash, string? encodingName, out string subPath, out string contentPath)
         {
             var hashString = hash.ToString();
             subPath = GetSubPath(hashString);
@@ -300,7 +301,7 @@ namespace Cassette
                 contentPath += "." + encodingName;
         }
 
-        private string GetContentPath(Hash hash, string encodingName = null)
+        private string GetContentPath(Hash hash, string? encodingName = null)
         {
             var hashString = hash.ToString();
             var subPath = GetSubPath(hashString);

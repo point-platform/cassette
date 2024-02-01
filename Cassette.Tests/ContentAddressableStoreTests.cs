@@ -126,7 +126,7 @@ namespace Cassette.Tests
         {
             var hash = Hash.Parse("40613A45BC715AE4A34895CBDD6122E982FE3DF5");
 
-            Assert.False(_store.TryRead(hash, out Stream stream));
+            Assert.False(_store.TryRead(hash, out _));
         }
 
         [Fact]
@@ -138,7 +138,7 @@ namespace Cassette.Tests
 
             stream.Position = 0;
 
-            Assert.True(_store.TryRead(hash, out Stream storedStream));
+            Assert.True(_store.TryRead(hash, out Stream? storedStream));
 
             using (storedStream)
                 TestUtil.AssertStreamsEqual(stream, storedStream);
@@ -169,13 +169,13 @@ namespace Cassette.Tests
 
             Assert.Equal(hash, _store.GetHashes().SingleOrDefault());
 
-            Assert.True(_store.TryRead(hash, out Stream readStream));
+            Assert.True(_store.TryRead(hash, out Stream? readStream));
             readStream.Dispose();
 
             Assert.True(_store.TryRead(hash, out readStream, encodingName: "gzip"));
             readStream.Dispose();
 
-            Assert.False(_store.TryRead(hash, out readStream, encodingName: "deflate"));
+            Assert.False(_store.TryRead(hash, out _, encodingName: "deflate"));
 
             Assert.True(_store.Delete(hash));
 
